@@ -1,8 +1,7 @@
 ---
-name: Design issue
-about: 機能要望はここ
+name: Other issue
+about: 上記以外
 title: ""
-labels: ["Design"]
 ---
 
 # 概要
@@ -17,3 +16,4 @@ labels: ["Design"]
 
 # チェックリスト
 - [ ] 優先度tagを設定しましたか？
+- [ ] ラベルを設定しましたか？
