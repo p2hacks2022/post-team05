@@ -11,4 +11,10 @@ iconフォルダであればアイコンに使用する素材がまとまって�
 
 #### デザインに関係する各種リンク
 
+### UI Design
+
 Figma : <https://www.notion.so/f85a39560a0849d4b67882f2698dda02>
+
+## 使用したツールやサービス
+
+User icon : <https://waifulabs.com/generate>
