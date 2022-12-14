@@ -24,9 +24,6 @@ class MainFragment: Fragment() {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        // TextView
-        val tv: TextView = binding.text
-
         return root
     }
 }
