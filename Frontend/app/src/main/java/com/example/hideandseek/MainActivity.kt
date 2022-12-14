@@ -1,5 +1,6 @@
 package com.example.hideandseek
 
+import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.findNavController
@@ -10,6 +11,9 @@ import com.example.hideandseek.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
+
+    // 位置情報・速度取得用のManager
+    private lateinit var locationManager: LocationManager
 
     private lateinit var binding: ActivityMainBinding
 
