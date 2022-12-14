@@ -1,4 +1,4 @@
-module github.com/Hackathon-for-FUN-TeamA/backend
+module github.com/p2hacks2022/post-team05
 
 go 1.18
 
