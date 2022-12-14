@@ -6,8 +6,8 @@ import android.location.Location
 import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -17,18 +17,24 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.hideandseek.databinding.ActivityMainBinding
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class MainActivity : AppCompatActivity() {
 
-    // 速度取得用のManager
-    private lateinit var locationManager: LocationManager
-
     // 直近の現在地情報を取得するためのクライアント
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    // 位置情報の設定をするためのパラメータを格納するRequest
+    private lateinit var locationRequest: LocationRequest
+
+    // 現在地を更新するためのコールバック
+    private lateinit var locationCallback: LocationCallback
+
+    //ロケーションがupdatesされたかどうかのflag
+    private var requestingLocationUpdates: Boolean = false
 
     private lateinit var binding: ActivityMainBinding
 
@@ -62,9 +68,11 @@ class MainActivity : AppCompatActivity() {
             when {
                 permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
                     // Precise location access granted
+                    requestingLocationUpdates = true
                 }
                 permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
                     // Only approximate location access granted
+                    requestingLocationUpdates = true
                 } else -> {
                     // No location access granted
                 }
@@ -80,6 +88,7 @@ class MainActivity : AppCompatActivity() {
         // 位置情報を取得する
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
+        // permission check
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -88,15 +97,10 @@ class MainActivity : AppCompatActivity() {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return
+            requestingLocationUpdates = true
         }
+
+        // 直近の位置情報を取得
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location : Location? ->
                 // Got last known location. In some rare situations this can be null
@@ -104,5 +108,63 @@ class MainActivity : AppCompatActivity() {
                     Log.d("LocationTest", location.speed.toString())
                 }
             }
+
+        // 位置情報リクエストの設定
+        locationRequest = LocationRequest.Builder(10000)
+            .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
+            .build()
+
+        // 現在の位置情報を取得する
+        val builder = LocationSettingsRequest.Builder()
+            .addLocationRequest(locationRequest)
+
+        val client: SettingsClient = LocationServices.getSettingsClient(this)
+        val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
+
+        // 位置情報更新コールバックを定義する
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                super.onLocationResult(locationResult)
+                for (location in locationResult.locations) {
+                    Log.d("LocationCallback", location.toString())
+                }
+            }
+        }
+    }
+
+
+    override fun onPause() {
+        super.onPause()
+        // 位置情報の更新を停止する
+        stopLocationUpdates()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (requestingLocationUpdates) startLocationUpdates()
+    }
+
+    // 位置情報の更新をする関数
+    private fun startLocationUpdates() {
+        // permission check
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestingLocationUpdates = true
+        }
+        fusedLocationClient.requestLocationUpdates(locationRequest,
+        locationCallback,
+            Looper.getMainLooper()
+            )
+    }
+
+    // 位置情報の更新を止める関数
+    private fun stopLocationUpdates() {
+        fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 }
