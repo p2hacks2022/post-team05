@@ -44,6 +44,8 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         // 位置情報の権限をリクエスト
+        // 正確な位置情報、おおよその位置情報どちらを許可しますか？というダイアログが出る。
+        // どちらか選んで許可すれば、選ばれたもの、許可されなければ権限はなし
         val locationPermissionRequest = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
         ) { permissions ->
@@ -59,6 +61,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // リクエストを送る
         locationPermissionRequest.launch(arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION
