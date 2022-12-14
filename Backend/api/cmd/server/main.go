@@ -20,6 +20,9 @@ func main() {
 		})
 	})
 
+	// プレイヤーの状態を更新するAPI
+	r.POST("/api/v1/players/:id/status/:status", UpdatePlayerStatus)
+
 	// 127.0.0.0:8000でサーバを建てる
 	r.Run()
 }
