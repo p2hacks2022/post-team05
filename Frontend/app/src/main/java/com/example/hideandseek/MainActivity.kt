@@ -48,7 +48,6 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // BottomNavigationのリスト
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_main
@@ -126,7 +125,7 @@ class MainActivity : AppCompatActivity() {
             override fun onLocationResult(locationResult: LocationResult) {
                 super.onLocationResult(locationResult)
                 for (location in locationResult.locations) {
-                    Log.d("LocationCallback", location.toString())
+                    Log.d("LocationCallback", location.speed.toString())
                 }
             }
         }
