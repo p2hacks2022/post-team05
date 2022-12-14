@@ -3,7 +3,7 @@ services:
   hikky-db:
     image: funera1/hikky-db
     environment:
-    - MYSQL_ROOT_PASSWORD=p
+    - MYSQL_ROOT_PASSWORD=passwd
     ports:
     - "3306:3306"
 
