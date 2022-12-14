@@ -36,6 +36,6 @@ CREATE TABLE `spacetimes` (
     `latitudea` float NOT NULL,
     `longtitude` float NOT NULL,
     `altitude` float NOT NULL,
-    `locator` int,
+    `locator` int, --プレイヤーor罠. プレイヤーならid, 罠なら-(id)
     PRIMARY KEY (`id`)
 );
