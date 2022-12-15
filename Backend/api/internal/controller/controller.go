@@ -1,11 +1,11 @@
-package main
+package controller
 
 import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/p2hacks2022/post-team05/internal/db/player"
-	"github.com/p2hacks2022/post-team05/internal/db/spacetime"
+	"github.com/p2hacks2022/post-team05/internal/model/player"
+	"github.com/p2hacks2022/post-team05/internal/model/spacetime"
 )
 
 func Ping(c *gin.Context) {
