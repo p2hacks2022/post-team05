@@ -8,23 +8,160 @@
         "version": "1.0"
     },
     "paths": {
-        "/ping": {
-            "get": {
-                "description": "get string by ID",
+        "/api/v1/players/{id}/status/{status}": {
+            "post": {
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Show a account",
+                "summary": "プレイヤーの状態を更新するAPI",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "player id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "player status",
+                        "name": "status",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "success",
                         "schema": {
                             "type": "string"
                         }
                     }
+                }
+            }
+        },
+        "/api/v1/spacetimes": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "指定された時刻の(位置, 罠or人, プレイヤーid, 状態)を取得する",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "time",
+                        "name": "time",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/controller.GetSpaceTimes.JsonResponse"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "指定された時刻の(位置, 罠or人, プレイヤーid, 状態)を格納するAPI",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "time",
+                        "name": "time",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "緯度",
+                        "name": "latitude",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "経度",
+                        "name": "longtitude",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "高度",
+                        "name": "altitude",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "人:player_id, 罠:-player_id",
+                        "name": "obj_id",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/ping": {
+            "get": {
+                "description": "ping pong",
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "test api",
+                "responses": {
+                    "200": {
+                        "description": "pong",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "controller.GetSpaceTimes.JsonResponse": {
+            "type": "object",
+            "properties": {
+                "altitude": {
+                    "type": "number"
+                },
+                "latitude": {
+                    "type": "number"
+                },
+                "longtitude": {
+                    "type": "number"
+                },
+                "objId": {
+                    "description": "人: player_id, 罠: player_id*(-1)",
+                    "type": "integer"
                 }
             }
         }

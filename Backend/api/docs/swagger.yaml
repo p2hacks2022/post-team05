@@ -1,3 +1,16 @@
+definitions:
+  controller.GetSpaceTimes.JsonResponse:
+    properties:
+      altitude:
+        type: number
+      latitude:
+        type: number
+      longtitude:
+        type: number
+      objId:
+        description: '人: player_id, 罠: player_id*(-1)'
+        type: integer
+    type: object
 info:
   contact: {}
   description: This is a sample server celler server.
@@ -5,17 +18,95 @@ info:
   title: Swagger Example API
   version: "1.0"
 paths:
-  /ping:
+  /api/v1/players/{id}/status/{status}:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: player id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: player status
+        in: path
+        name: status
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+      summary: プレイヤーの状態を更新するAPI
+  /api/v1/spacetimes:
     get:
       consumes:
       - application/json
-      description: get string by ID
+      parameters:
+      - description: time
+        in: query
+        name: time
+        required: true
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
+            items:
+              $ref: '#/definitions/controller.GetSpaceTimes.JsonResponse'
+            type: array
+      summary: 指定された時刻の(位置, 罠or人, プレイヤーid, 状態)を取得する
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: time
+        in: formData
+        name: time
+        required: true
+        type: string
+      - description: 緯度
+        in: formData
+        name: latitude
+        required: true
+        type: number
+      - description: 経度
+        in: formData
+        name: longtitude
+        required: true
+        type: number
+      - description: 高度
+        in: formData
+        name: altitude
+        required: true
+        type: number
+      - description: 人:player_id, 罠:-player_id
+        in: formData
+        name: obj_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
             type: string
-      summary: Show a account
+      summary: 指定された時刻の(位置, 罠or人, プレイヤーid, 状態)を格納するAPI
+  /ping:
+    get:
+      consumes:
+      - application/json
+      description: ping pong
+      responses:
+        "200":
+          description: pong
+          schema:
+            type: string
+      summary: test api
 swagger: "2.0"

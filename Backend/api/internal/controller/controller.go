@@ -8,19 +8,26 @@ import (
 	"github.com/p2hacks2022/post-team05/internal/model/spacetime"
 )
 
-// ShowAccount godoc
-// @Summary Show a account
-// @Description get string by ID
-// @Accept  json
-// @Success 200 {object} gin.H{"message": "pong"}
-// @Router /ping [get]
+// @Summary     test api
+// @Description ping pong
+// @Accept      json
+// @Success     200 {string} string "pong"
+// @Router      /ping [get]
 func Ping(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "pong",
 	})
 }
 
-// プレイヤーの状態を更新する
+// @Summary プレイヤーの状態を更新するAPI
+// @Param   id     path int true "player id"
+// @Param   status path int true "player status"
+// @Accept  json
+// @Produce json
+// @Success 200 {string} string "success"
+// @Filure  400 {string} string "引数が違います"
+// @Filure  500 {string} string err.Error()
+// @Router  /api/v1/players/{id}/status/{status} [post]
 func UpdatePlayerStatus(c *gin.Context) {
 	// パスパラメータ取得
 	id, err := strconv.Atoi(c.Param("id"))
@@ -52,7 +59,14 @@ func UpdatePlayerStatus(c *gin.Context) {
 	})
 }
 
-// 指定された時刻の(位置, 罠or人, プレイヤーid, 状態)を取得する
+// @Summary 指定された時刻の(位置, 罠or人, プレイヤーid, 状態)を取得する
+// @Param   time query string true "time"
+// @Accept  json
+// @Produce json
+// @Success 200 {array} controller.GetSpaceTimes.JsonResponse
+// @Filure  400 {string} string err.Error()
+// @Filure  500 {string} string err.Error()
+// @Router  /api/v1/spacetimes [get]
 func GetSpaceTimes(c *gin.Context) {
 	// param取得
 	time := c.Query("time")
@@ -83,7 +97,18 @@ func GetSpaceTimes(c *gin.Context) {
 	c.JSON(200, jsonRes)
 }
 
-// 指定された時刻の(位置, 罠or人, プレイヤーid, 状態)を格納する
+// @Summary 指定された時刻の(位置, 罠or人, プレイヤーid, 状態)を格納するAPI
+// @Param   time       formData string  true "time"
+// @Param   latitude   formData float32 true "緯度"
+// @Param   longtitude formData float32 true "経度"
+// @Param   altitude   formData float32 true "高度"
+// @Param   obj_id     formData int     true "人:player_id, 罠:-player_id"
+// @Accept  json
+// @Produce json
+// @Success 200 {string} string "success"
+// @Filure  400 {string} string err.Error()
+// @Filure  500 {string} string err.Error()
+// @Router  /api/v1/spacetimes [post]
 func PostSpaceTimes(c *gin.Context) {
 	// param取得
 	type JsonRequest struct {
