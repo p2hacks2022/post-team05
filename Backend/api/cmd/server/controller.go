@@ -69,3 +69,35 @@ func GetSpaceTimes(c *gin.Context) {
 	}
 	c.JSON(200, jsonRes)
 }
+
+// 指定された時刻の(位置, 罠or人, プレイヤーid, 状態)を格納する
+func PostSpaceTimes(c *gin.Context) {
+	// param取得
+	type JsonRequest struct {
+		Time       string  `json:"time"`
+		Latitude   float32 `json:"latitude"`
+		Longtitude float32 `json:"longtitude"`
+		Altitude   float32 `json:"altitude"`
+		ObjId      int     `json:"obj_id"`
+	}
+	var req JsonRequest
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	// spacetimesに受け取ったパラメータをpostする
+	err = spacetime.Post(req.Time, req.Latitude, req.Longtitude, req.Altitude, req.ObjId)
+	if err != nil {
+		c.JSON(500, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+	c.JSON(200, gin.H{
+		"message": "success",
+	})
+}
