@@ -2,7 +2,6 @@ package main
 
 import (
 	"strconv"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/p2hacks2022/post-team05/internal/db/player"
@@ -43,31 +42,21 @@ func UpdatePlayerStatus(c *gin.Context) {
 // 指定された時刻の(位置, 罠or人, プレイヤーid, 状態)を取得する
 func GetSpaceTimes(c *gin.Context) {
 	// param取得
-	type JsonRequest struct {
-		Time time.Time `json: "time"`
-	}
-	var req JsonRequest
-	err := c.ShouldBindJSON(&req)
-	if err != nil {
-		c.JSON(400, gin.H{
-			"message": err,
-		})
-		return
-	}
+	time := c.Query("time")
 
 	// 返り値
 	type JsonResponse struct {
-		Latitude   float64
-		Longtitude float64
-		Altitude   float64
+		Latitude   float32
+		Longtitude float32
+		Altitude   float32
 		ObjId      int // 人: player_id, 罠: player_id*(-1)
 	}
 
 	// 指定した時間の位置とObjを取得
-	res, err := spacetime.GetByTime(req.Time)
+	res, err := spacetime.GetByTime(time)
 	if err != nil {
 		c.JSON(500, gin.H{
-			"message": err,
+			"message": err.Error(),
 		})
 		return
 	}
