@@ -1,9 +1,10 @@
 package spacetime
 
 type SpaceTime struct {
-	Id         int
-	Latitude   float64
-	Longtitude float64
-	Altitude   float64
-	ObjId      int
+	Id         int     `db:"id"`
+	Time       string  `db:"time"`
+	Latitude   float64 `db:"latitude"`
+	Longtitude float64 `db:"longtitude"`
+	Altitude   float64 `db:"altitude"`
+	ObjId      int     `db:"obj_id"`
 }

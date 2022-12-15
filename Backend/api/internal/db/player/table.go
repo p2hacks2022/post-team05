@@ -6,6 +6,6 @@ package player
 // 3: 勝利
 // 4: 鬼
 type Player struct {
-	Id     int
-	Status int
+	Id     int `db:"id"`
+	Status int `db:"status"`
 }
