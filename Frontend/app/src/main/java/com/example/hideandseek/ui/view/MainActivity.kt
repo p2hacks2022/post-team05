@@ -1,14 +1,14 @@
-package com.example.hideandseek
+package com.example.hideandseek.ui.view
 
 import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -16,10 +16,15 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.hideandseek.R
+import com.example.hideandseek.data.datasource.local.User
+import com.example.hideandseek.data.datasource.local.UserRoomDatabase
 import com.example.hideandseek.databinding.ActivityMainBinding
+import com.example.hideandseek.ui.viewmodel.MainActivityViewModel
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.time.LocalTime
 
 
 class MainActivity : AppCompatActivity() {
@@ -36,9 +41,10 @@ class MainActivity : AppCompatActivity() {
     //ロケーションがupdatesされたかどうかのflag
     private var requestingLocationUpdates: Boolean = false
 
+    private val viewModel: MainActivityViewModel by viewModels()
+
     private lateinit var binding: ActivityMainBinding
 
-    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -104,6 +110,10 @@ class MainActivity : AppCompatActivity() {
             .addOnSuccessListener { location : Location? ->
                 // Got last known location. In some rare situations this can be null
                 if (location != null) {
+                    val gap = viewModel.calculateGap(location)
+                    val relativeTime = LocalTime.now().minusNanos(gap)
+                    val user = User(0, relativeTime.toString(), location.longitude, location.latitude)
+                    viewModel.insert(user, applicationContext)
                     Log.d("LocationTest", location.speed.toString())
                 }
             }
@@ -125,6 +135,10 @@ class MainActivity : AppCompatActivity() {
             override fun onLocationResult(locationResult: LocationResult) {
                 super.onLocationResult(locationResult)
                 for (location in locationResult.locations) {
+                    val gap = viewModel.calculateGap(location)
+                    val relativeTime = LocalTime.now().minusNanos(gap)
+                    val user = User(0, relativeTime.toString(), location.longitude, location.latitude)
+                    viewModel.insert(user, applicationContext)
                     Log.d("LocationCallback", location.speed.toString())
                 }
             }
