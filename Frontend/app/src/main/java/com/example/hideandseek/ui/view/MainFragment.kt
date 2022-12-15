@@ -13,6 +13,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.hideandseek.databinding.FragmentMainBinding
 import com.example.hideandseek.ui.viewmodel.MainFragmentViewModel
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class MainFragment: Fragment() {
@@ -32,25 +33,13 @@ class MainFragment: Fragment() {
         // Viewの取得
         val tvRelativeTime: TextView = binding.tvRelativeTime
 
-        context?.let { viewModel.fetchRelativeTime(it) }
-
+        // データベースからデータを持ってくる
         context?.let { viewModel.setAllUsersLive(it) }
 
+        // データが更新されたら表示
         viewModel.allUsersLive.observe(viewLifecycleOwner) {
-            tvRelativeTime.text = it.toString()
+            tvRelativeTime.text = it[it.size-1].relativeTime
         }
-//        lifecycleScope.launch {
-//            repeatOnLifecycle(lifecycle.State.STARTED) {
-//                viewModel.uiState.collect {
-//                    tvRelativeTime.text = it.allUsers.toString()
-//                }
-//            }
-//        }
-
-//        viewModel.allUsers.observe(viewLifecycleOwner, Observer {
-//            viewModel.fetchRelativeTime()
-//            tvRelativeTime.text = it.toString()
-//        })
 
         return root
     }

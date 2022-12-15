@@ -14,8 +14,6 @@ class UserRepository (private val context: Context) {
 
     val allUsers: Flow<List<User>> = userDao.getAll()
 
-//    @Suppress("RedundantSuspendModifier")
-//    @WorkerThread
     suspend fun insert(user: User) {
         userDao.insert(user)
     }

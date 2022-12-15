@@ -21,17 +21,17 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 
 class MainActivityViewModel(): ViewModel() {
-//    private val _uiState = MutableStateFlow(MainActivityUiState())
-//    val uiState: StateFlow<MainActivityUiState> = _uiState.asStateFlow()
 
+    // 現在自国とのずれをnano秒でもつ
     var gap: Long = 0
-    lateinit var relativeTime: String
 
+    // 特殊相対性理論によりずれを計算する
     fun calculateGap(location: Location): Long {
-        gap += 100000000000*sqrt(1-(location.speed/10000).pow(2)).toLong()
+        gap += 1000000000*(1-sqrt(1-(location.speed/100).pow(2))).toLong()
         return gap
     }
 
+    // Roomデータベースにuserデータを送信
     fun insert(user: User, context: Context) = viewModelScope.launch {
         withContext(Dispatchers.IO) {
             UserRepository(context).insert(user)

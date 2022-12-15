@@ -38,9 +38,6 @@ class MainActivity : AppCompatActivity() {
     // 現在地を更新するためのコールバック
     private lateinit var locationCallback: LocationCallback
 
-    //ロケーションがupdatesされたかどうかのflag
-    private var requestingLocationUpdates: Boolean = false
-
     private val viewModel: MainActivityViewModel by viewModels()
 
     private lateinit var binding: ActivityMainBinding
@@ -73,11 +70,9 @@ class MainActivity : AppCompatActivity() {
             when {
                 permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
                     // Precise location access granted
-                    requestingLocationUpdates = true
                 }
                 permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
                     // Only approximate location access granted
-                    requestingLocationUpdates = true
                 } else -> {
                     // No location access granted
                 }
@@ -102,7 +97,7 @@ class MainActivity : AppCompatActivity() {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            requestingLocationUpdates = true
+            return
         }
 
         // 直近の位置情報を取得
@@ -110,9 +105,10 @@ class MainActivity : AppCompatActivity() {
             .addOnSuccessListener { location : Location? ->
                 // Got last known location. In some rare situations this can be null
                 if (location != null) {
+                    //ずれと相対時間を計算
                     val gap = viewModel.calculateGap(location)
                     val relativeTime = LocalTime.now().minusNanos(gap)
-                    val user = User(0, relativeTime.toString(), location.longitude, location.latitude)
+                    val user = User(0, relativeTime.toString().substring(0, 8), location.longitude, location.latitude)
                     viewModel.insert(user, applicationContext)
                     Log.d("LocationTest", location.speed.toString())
                 }
@@ -135,9 +131,10 @@ class MainActivity : AppCompatActivity() {
             override fun onLocationResult(locationResult: LocationResult) {
                 super.onLocationResult(locationResult)
                 for (location in locationResult.locations) {
+                    // ずれと相対時間を計算
                     val gap = viewModel.calculateGap(location)
                     val relativeTime = LocalTime.now().minusNanos(gap)
-                    val user = User(0, relativeTime.toString(), location.longitude, location.latitude)
+                    val user = User(0, relativeTime.toString().substring(0, 8), location.longitude, location.latitude)
                     viewModel.insert(user, applicationContext)
                     Log.d("LocationCallback", location.speed.toString())
                 }
@@ -154,7 +151,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (requestingLocationUpdates) startLocationUpdates()
+        startLocationUpdates()
     }
 
     // 位置情報の更新をする関数
@@ -168,7 +165,7 @@ class MainActivity : AppCompatActivity() {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            requestingLocationUpdates = true
+            return
         }
         fusedLocationClient.requestLocationUpdates(locationRequest,
         locationCallback,
