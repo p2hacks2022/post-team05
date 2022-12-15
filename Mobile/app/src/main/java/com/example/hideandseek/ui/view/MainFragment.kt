@@ -3,9 +3,11 @@ package com.example.hideandseek.ui.view
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -24,6 +26,9 @@ class MainFragment: Fragment() {
     private val viewModel: MainFragmentViewModel by viewModels()
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
+
+    private var width : Int = 0
+    private var height: Int = 0
 
     private val binding get() = _binding!!
 
@@ -49,7 +54,7 @@ class MainFragment: Fragment() {
             // URLから画像を取得
             coroutineScope.launch {
                 val originalDeferred = coroutineScope.async(Dispatchers.IO) {
-                    getOriginalBitmap("https://maps.googleapis.com/maps/api/staticmap?center=${it[it.size-1].latitude},${it[it.size-1].longitude}&size=640x320&scale=1&zoom=18&key=AIzaSyA-cfLegBoleKaT2TbU5R4K1uRkzBR6vUQ&markers=color:red|${it[it.size-1].latitude},${it[it.size-1].longitude}")
+                    getOriginalBitmap("https://maps.googleapis.com/maps/api/staticmap?center=${it[0].latitude},${it[0].longitude}&size=350x640&scale=1&zoom=18&key=AIzaSyA-cfLegBoleKaT2TbU5R4K1uRkzBR6vUQ&markers=color:red|${it[it.size-1].latitude},${it[it.size-1].longitude}")
                 }
                 val originalBitmap = originalDeferred.await()
                 viewModel.setMap(originalBitmap)
