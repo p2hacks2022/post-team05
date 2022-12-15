@@ -2,6 +2,8 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func main() {
@@ -20,14 +22,21 @@ func main() {
 		})
 	})
 
-	// プレイヤーの状態を更新するAPI
-	r.POST("/api/v1/players/:id/status/:status", UpdatePlayerStatus)
+	// v1
+	v1 := r.Group("/api/v1")
+	{
+		// プレイヤーの状態を更新するAPI
+		v1.POST("/players/:id/status/:status", UpdatePlayerStatus)
 
-	// 指定された時刻の(位置, 罠or人, プレイヤーid, 状態)を返す
-	r.GET("/api/v1/spacetimes", GetSpaceTimes)
+		// 指定された時刻の(位置, 罠or人, プレイヤーid, 状態)を返す
+		v1.GET("/spacetimes", GetSpaceTimes)
 
-	// 指定された時刻の(位置, 罠or人, プレイヤーid, 状態)を返す
-	r.POST("/api/v1/spacetimes", PostSpaceTimes)
+		// 指定された時刻の(位置, 罠or人, プレイヤーid, 状態)を返す
+		v1.POST("/spacetimes", PostSpaceTimes)
+	}
+
+	// swagger ui
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// 127.0.0.0:8000でサーバを建てる
 	r.Run()
