@@ -44,14 +44,6 @@ func GetSpaceTimes(c *gin.Context) {
 	// param取得
 	time := c.Query("time")
 
-	// 返り値
-	type JsonResponse struct {
-		Latitude   float32
-		Longtitude float32
-		Altitude   float32
-		ObjId      int // 人: player_id, 罠: player_id*(-1)
-	}
-
 	// 指定した時間の位置とObjを取得
 	res, err := spacetime.GetByTime(time)
 	if err != nil {
@@ -60,5 +52,20 @@ func GetSpaceTimes(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(200, res)
+
+	// 受け取ったものをJsonResponseに詰め直す
+	type JsonResponse struct {
+		Latitude   float32
+		Longtitude float32
+		Altitude   float32
+		ObjId      int // 人: player_id, 罠: player_id*(-1)
+	}
+	jsonRes := make([]JsonResponse, len(res))
+	for i := 0; i < len(res); i++ {
+		jsonRes[i].Latitude = res[i].Latitude
+		jsonRes[i].Longtitude = res[i].Longtitude
+		jsonRes[i].Altitude = res[i].Altitude
+		jsonRes[i].ObjId = res[i].ObjId
+	}
+	c.JSON(200, jsonRes)
 }
