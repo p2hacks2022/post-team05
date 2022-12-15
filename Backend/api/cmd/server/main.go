@@ -23,6 +23,9 @@ func main() {
 	// プレイヤーの状態を更新するAPI
 	r.POST("/api/v1/players/:id/status/:status", UpdatePlayerStatus)
 
+	// 指定された時刻の(位置, 罠or人, プレイヤーid, 状態)を返す
+	r.GET("/api/v1/spacetimes", GetSpaceTimes)
+
 	// 127.0.0.0:8000でサーバを建てる
 	r.Run()
 }
