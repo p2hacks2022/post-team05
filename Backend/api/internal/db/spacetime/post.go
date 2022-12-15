@@ -4,6 +4,7 @@ import (
 	"github.com/p2hacks2022/post-team05/internal/db"
 )
 
+// spacetimesにinsertする
 func Post(time string, latitude, longtitude, altitude float32, objId int) error {
 	// dbmap初期化
 	dbmap, err := db.InitDb()
