@@ -1,12 +1,10 @@
 package spacetime
 
 import (
-	"time"
-
-	"github.com/Hackathon-for-FUN-TeamA/backend/internal/db"
+	"github.com/p2hacks2022/post-team05/internal/db"
 )
 
-func GetByTime(time time.Time) ([]SpaceTime, error) {
+func GetByTime(time string) ([]SpaceTime, error) {
 	// dbmap初期化
 	dbmap, err := db.InitDb()
 	if err != nil {
@@ -16,7 +14,7 @@ func GetByTime(time time.Time) ([]SpaceTime, error) {
 
 	// time指定でspacetimesのデータを取得
 	var spacetimes []SpaceTime
-	_, err = dbmap.Select(&spacetimes, "SELECT * FROM spacetime WHERE time=?", time)
+	_, err = dbmap.Select(&spacetimes, "SELECT * FROM spacetimes WHERE time=?", time)
 	if err != nil {
 		return []SpaceTime{}, err
 	}
