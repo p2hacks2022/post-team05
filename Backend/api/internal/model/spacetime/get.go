@@ -1,12 +1,10 @@
 package spacetime
 
-import (
-	"github.com/p2hacks2022/post-team05/internal/db"
-)
+import "github.com/p2hacks2022/post-team05/internal/model"
 
 func GetByTime(time string) ([]SpaceTime, error) {
 	// dbmap初期化
-	dbmap, err := db.InitDb()
+	dbmap, err := model.InitDb()
 	if err != nil {
 		return []SpaceTime{}, err
 	}
