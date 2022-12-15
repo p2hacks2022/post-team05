@@ -8,6 +8,12 @@ import (
 	"github.com/p2hacks2022/post-team05/internal/model/spacetime"
 )
 
+// ShowAccount godoc
+// @Summary Show a account
+// @Description get string by ID
+// @Accept  json
+// @Success 200 {object} gin.H{"message": "pong"}
+// @Router /ping [get]
 func Ping(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "pong",

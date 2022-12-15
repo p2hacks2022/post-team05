@@ -1,171 +1,21 @@
-swagger: '2.0'
-
 info:
-  version: "1.0.0"
-  title: タイトル
-
+  contact: {}
+  description: This is a sample server celler server.
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "1.0"
 paths:
-  /players/{id}/status/{status}:
-    post:
-      description: |
-        description
-        説明文
-
-      parameters:
-        -
-          name: id
-          in: path
-          description: Id of array
-          required: true
-          type: number
-          format: int
-        -  
-          name: status
-          in: path
-          required: true
-          type: number
-          format: int
-
-      responses:
-        200:
-          description: Successful responses
-          schema:
-            title: ArrayOfPosts
-            type: object
-            items:
-              properties:
-                message:
-                  type: string
-        400:
-          description: parameterが違います 
-          schema:
-            type: object
-            items:
-              properties:
-                message:
-                  type: string
-        500:
-          description: 内部エラー
-          schema:
-            type: object
-            items:
-              properties:
-                message:
-                  type: string
-                
-  /spacetimes:
+  /ping:
     get:
-      description: |
-        description
-        説明文
-
-      parameters:
-        -
-          name: time
-          in: query
-          description: time
-          required: true
-          type: string
-
-      responses:
-        200:
-          description: Successful responses
-          schema:
-            title: ArrayOfPosts
-            type: array
-            items:
-              title: Posts
-              type: object
-              properties:
-                latitude:
-                  type: number
-                  format: float
-                longtitude:
-                  type: number
-                  format: float
-                altitude:
-                  type: number
-                  format: float
-                obj_id:
-                  type: number
-                  format: int
-        400:
-          description: parameterが違います
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                
-        500:
-          description: 内部エラー
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-    
-    post:
-      description: |
-        description
-        説明文
       consumes:
-        - application/x-www-form-urlencoded
-      parameters:
-        -
-          name: time
-          in: formData
-          description: time
-          required: true
-          type: string
-        - 
-          name: latitude
-          in: formData
-          required: true
-          type: number
-          format: float
-        - 
-          name: longtitude
-          in: formData
-          required: true
-          type: number
-          format: float\
-        - 
-          name: altitude
-          in: formData
-          required: true
-          type: number
-          format: float
-        - 
-          name: obj_id
-          in: formData
-          required: true
-          type: number
-          format: int
-
+      - application/json
+      description: get string by ID
+      produces:
+      - application/json
       responses:
-        200:
-          description: Successful responses
+        "200":
+          description: OK
           schema:
-            title: ArrayOfPosts
-            type: object
-            properties:
-              message:
-                type: string
-        400:
-          description: parameterが違います
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                
-        500:
-          description: 内部エラー
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-        
-                
+            type: string
+      summary: Show a account
+swagger: "2.0"
