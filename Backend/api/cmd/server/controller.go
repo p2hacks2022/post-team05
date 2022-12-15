@@ -19,21 +19,28 @@ func UpdatePlayerStatus(c *gin.Context) {
 	// パスパラメータ取得
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		c.JSON(500, gin.H{
+		c.JSON(400, gin.H{
 			"message": "idが違います",
 		})
 		return
 	}
 	status, err := strconv.Atoi(c.Param("status"))
 	if err != nil || status < 1 || 4 < status {
-		c.JSON(500, gin.H{
+		c.JSON(400, gin.H{
 			"message": "statusが違います",
 		})
 		return
 	}
 
 	// status更新
-	player.UpdateStatus(id, status)
+	err = player.UpdateStatus(id, status)
+	if err != nil {
+		c.JSON(500, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
 	c.JSON(200, gin.H{
 		"message": "success",
 	})
@@ -47,7 +54,7 @@ func GetSpaceTimes(c *gin.Context) {
 	// 指定した時間の位置とObjを取得
 	res, err := spacetime.GetByTime(time)
 	if err != nil {
-		c.JSON(500, gin.H{
+		c.JSON(400, gin.H{
 			"message": err.Error(),
 		})
 		return
