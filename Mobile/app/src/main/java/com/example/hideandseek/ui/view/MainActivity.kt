@@ -2,6 +2,8 @@ package com.example.hideandseek.ui.view
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
@@ -24,6 +26,11 @@ import com.example.hideandseek.ui.viewmodel.MainActivityViewModel
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import java.net.URL
 import java.time.LocalTime
 
 
@@ -141,7 +148,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
 
     override fun onPause() {
         super.onPause()
