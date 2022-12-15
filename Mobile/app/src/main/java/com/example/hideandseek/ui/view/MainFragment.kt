@@ -29,7 +29,7 @@ class MainFragment: Fragment() {
     ): View? {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
+        
         // Viewの取得
         val tvRelativeTime: TextView = binding.tvRelativeTime
 
@@ -44,4 +44,3 @@ class MainFragment: Fragment() {
         return root
     }
 }
-
