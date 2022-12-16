@@ -1,6 +1,8 @@
 package player
 
-import "github.com/p2hacks2022/post-team05/internal/model"
+import (
+	"github.com/p2hacks2022/post-team05/internal/model"
+)
 
 // Playerのstatusを更新する
 func UpdateStatus(id, status int) error {
@@ -20,6 +22,7 @@ func UpdateStatus(id, status int) error {
 
 	// status更新
 	playerData.Status = status
+	dbmap.AddTableWithName(Player{}, "players").SetKeys(true, "Id")
 	_, err = dbmap.Update(&playerData)
 	if err != nil {
 		return err

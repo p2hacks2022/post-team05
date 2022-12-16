@@ -98,13 +98,9 @@ func GetSpaceTimes(c *gin.Context) {
 }
 
 // @Summary 指定された時刻の(位置, 罠or人, プレイヤーid, 状態)を格納するAPI
-// @Param   time       formData string  true "time"
-// @Param   latitude   formData float32 true "緯度"
-// @Param   longtitude formData float32 true "経度"
-// @Param   altitude   formData float32 true "高度"
-// @Param   obj_id     formData int     true "人:player_id, 罠:-player_id"
+// @Param   request body controller.PostSpaceTimes.JsonRequest true "request json"
 // @Accept  json
-// @Produce json
+// @Produce application/json
 // @Success 200 {string} string "success"
 // @Filure  400 {string} string err.Error()
 // @Filure  500 {string} string err.Error()
