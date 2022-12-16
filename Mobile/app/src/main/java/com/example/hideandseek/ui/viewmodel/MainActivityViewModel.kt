@@ -37,4 +37,42 @@ class MainActivityViewModel(): ViewModel() {
             UserRepository(context).insert(user)
         }
     }
+
+    fun deleteAll(context: Context) = viewModelScope.launch {
+        withContext(Dispatchers.IO) {
+            UserRepository(context).deleteAll()
+        }
+    }
+
+    fun resetDatabase(context: Context) {
+        deleteAll(context)
+
+        for (hour in 22..22) {
+            var relativeTime = ""
+            // hourが一桁の時は前に0をつける
+            relativeTime += if (hour < 10) {
+                "0$hour:"
+            } else {
+                "$hour:"
+            }
+            for (minute in 47..49) {
+                // jが一桁の時は前に0をつける
+                relativeTime += if (minute < 10) {
+                    "0$minute:"
+                } else {
+                    "$minute:"
+                }
+                for (second in 0..59) {
+                    // kが一桁の時は前に0をつける
+                    relativeTime += if (second < 10) {
+                        "$second"
+                    } else {
+                        "$second"
+                    }
+                    val user = User(0, relativeTime, 0.0, 0.0)
+                    insert(user, context)
+                }
+            }
+        }
+    }
 }

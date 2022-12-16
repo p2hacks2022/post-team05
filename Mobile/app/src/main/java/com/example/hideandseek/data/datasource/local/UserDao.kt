@@ -23,5 +23,5 @@ interface UserDao {
     fun getAll(): Flow<List<User>>
 
     @Query("DELETE FROM user_table")
-    fun deleteAll()
+    suspend fun deleteAll()
 }
