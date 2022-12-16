@@ -20,10 +20,17 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import java.net.URL
+import kotlin.math.log
 
 class MainFragment: Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val viewModel: MainFragmentViewModel by viewModels()
+
+    private val locationArray = Array(60) {
+        Array(3) {
+            arrayOfNulls<Double>(2)
+        }
+    }
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
@@ -39,6 +46,16 @@ class MainFragment: Fragment() {
     ): View? {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        // デモ用のリスト作成
+        for (i in 0..59) {
+            locationArray[i][0][0] = 41.84202707025747 + i*0.00001
+            locationArray[i][0][1] = 140.7673718711624 + i*0.00001
+            locationArray[i][1][0] = 41.84222707025747 + i*0.00001
+            locationArray[i][1][1] = 140.7673718711624 + i*0.00001
+            locationArray[i][2][0] = 41.84192707025747 + i*0.00001
+            locationArray[i][2][1] = 140.7674718711624 + i*0.00001
+        }
         
         // Viewの取得
         val tvRelativeTime: TextView = binding.tvRelativeTime
@@ -52,9 +69,16 @@ class MainFragment: Fragment() {
             if (it.isNotEmpty()) {
                 tvRelativeTime.text = it[it.size-1].relativeTime
                 // URLから画像を取得
+                var url = "https://maps.googleapis.com/maps/api/staticmap?center=${it[it.size-1].latitude},${it[it.size-1].longitude}&size=350x640&scale=1&zoom=18&key=AIzaSyA-cfLegBoleKaT2TbU5R4K1uRkzBR6vUQ&markers=color:red|${it[it.size-1].latitude},${it[it.size-1].longitude}"
+
+                for (i in 0..2) {
+                    url += "&markers=icon:https://goo.gl/5y3S82|${locationArray[it[it.size-1].relativeTime.substring(6).toInt()][i][0]},${locationArray[it[it.size-1].relativeTime.substring(6).toInt()][i][1]}"
+                }
+
+                // URLから画像を取得
                 coroutineScope.launch {
                     val originalDeferred = coroutineScope.async(Dispatchers.IO) {
-                        getOriginalBitmap("https://maps.googleapis.com/maps/api/staticmap?center=${it[it.size-1].latitude},${it[it.size-1].longitude}&size=350x640&scale=1&zoom=18&key=AIzaSyA-cfLegBoleKaT2TbU5R4K1uRkzBR6vUQ&markers=color:red|${it[it.size-1].latitude},${it[it.size-1].longitude}")
+                        getOriginalBitmap(url)
                     }
                     val originalBitmap = originalDeferred.await()
                     viewModel.setMap(originalBitmap)
@@ -62,10 +86,32 @@ class MainFragment: Fragment() {
             }
         }
 
+        // 特定の時刻の位置情報を表示
+//        viewModel.location.observe(viewLifecycleOwner) {
+//            Log.d("TEST", it.toString())
+//            if (it.isNotEmpty()) {
+//                var url = "https://maps.googleapis.com/maps/api/staticmap?center=${it[0].latitude},${it[0].longitude}&size=350x640&scale=1&zoom=18&key=AIzaSyA-cfLegBoleKaT2TbU5R4K1uRkzBR6vUQ&markers=color:red|${it[0].latitude},${it[0].longitude}"
+//
+//                if (it.size > 1) {
+//                    for (i in 1 until it.size) {
+//                        url += "&markers=color:red|${it[i].latitude},${it[i].longitude}"
+//                    }
+//                }
+//
+//                // URLから画像を取得
+//                coroutineScope.launch {
+//                    val originalDeferred = coroutineScope.async(Dispatchers.IO) {
+//                        getOriginalBitmap(url)
+//                    }
+//                    val originalBitmap = originalDeferred.await()
+//                    viewModel.setMap(originalBitmap)
+//                }
+//            }
+//        }
+
         // Mapに画像をセット
         viewModel.map.observe(viewLifecycleOwner) {
             ivMap.setImageBitmap(it)
-
         }
 
 

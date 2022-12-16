@@ -112,13 +112,12 @@ class MainActivity : AppCompatActivity() {
             .addOnSuccessListener { location : Location? ->
                 // Got last known location. In some rare situations this can be null
                 if (location != null) {
+//                    viewModel.resetDatabase(applicationContext)
                     //ずれと相対時間を計算
                     val gap = viewModel.calculateGap(location)
                     val relativeTime = LocalTime.now().minusNanos(gap)
                     val user = User(0, relativeTime.toString().substring(0, 8), location.longitude, location.latitude)
-                    if (relativeTime.second%10 == 0) {
-                        viewModel.insert(user, applicationContext)
-                    }
+                    viewModel.insert(user, applicationContext)
                     Log.d("LocationTest", location.speed.toString())
                 }
             }
