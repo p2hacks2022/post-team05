@@ -83,39 +83,13 @@
                 "summary": "指定された時刻の(位置, 罠or人, プレイヤーid, 状態)を格納するAPI",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "time",
-                        "name": "time",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "number",
-                        "description": "緯度",
-                        "name": "latitude",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "number",
-                        "description": "経度",
-                        "name": "longtitude",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "number",
-                        "description": "高度",
-                        "name": "altitude",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "人:player_id, 罠:-player_id",
-                        "name": "obj_id",
-                        "in": "formData",
-                        "required": true
+                        "description": "request json",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.PostSpaceTimes.JsonRequest"
+                        }
                     }
                 ],
                 "responses": {
@@ -162,6 +136,26 @@
                 "objId": {
                     "description": "人: player_id, 罠: player_id*(-1)",
                     "type": "integer"
+                }
+            }
+        },
+        "controller.PostSpaceTimes.JsonRequest": {
+            "type": "object",
+            "properties": {
+                "altitude": {
+                    "type": "number"
+                },
+                "latitude": {
+                    "type": "number"
+                },
+                "longtitude": {
+                    "type": "number"
+                },
+                "obj_id": {
+                    "type": "integer"
+                },
+                "time": {
+                    "type": "string"
                 }
             }
         }
