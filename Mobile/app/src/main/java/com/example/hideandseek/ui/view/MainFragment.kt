@@ -2,6 +2,7 @@ package com.example.hideandseek.ui.view
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -60,7 +61,10 @@ class MainFragment: Fragment() {
         }
         
         // Viewの取得
-        // 時間のテキスト
+        // 時間表示の場所
+        val ivTime:           ImageView = binding.ivTime
+        val tvNow:            TextView  = binding.tvNow
+        val tvLimit:          TextView  = binding.tvLimit
         val tvRelativeTime:   TextView  = binding.tvRelativeTime
         val tvLimitTime:      TextView  = binding.tvLimitTime
         // Map
@@ -92,6 +96,25 @@ class MainFragment: Fragment() {
         val user4Demon:       ImageView = binding.user4Demon
         // User captured
         val user1Captured:    ImageView = binding.user1Captured
+        // 罠にかかったとき
+        val ivEye:            ImageView = binding.ivEye
+        val tvTrap:           TextView  = binding.tvTrap
+        val trapDialogText:   ImageView = binding.textOniTrap
+        val trapDialogDemon:  ImageView = binding.ivOniTrap
+        // クリアしたとき
+        val dialogClear:      ImageView = binding.dialogClear
+        val dialogClearUser1: ImageView = binding.dialogClearUser1
+        val btClearClose:     ImageView = binding.clearClose
+        // Result画面
+        val resultBack:       ImageView = binding.resultBack
+        val tvResult:         TextView  = binding.tvResult
+        val tvWinner:         TextView  = binding.tvWinner
+        val tvLoser:          TextView  = binding.tvLoser
+        val winnerUser1:      ImageView = binding.winnerUser1
+        val winnerUser2:      ImageView = binding.winnerUser2
+        val loserUser3:       ImageView = binding.loserUser3
+        val loserUser4:       ImageView = binding.loserUser4
+        val btResultClose:    ImageView = binding.btResultClose
 
         // データベースからデータを持ってくる
         context?.let { viewModel.setAllUsersLive(it) }
@@ -101,6 +124,9 @@ class MainFragment: Fragment() {
             if (it.isNotEmpty()) {
                 viewModel.setLimitTime(it[0].relativeTime)
                 tvRelativeTime.text = it[it.size-1].relativeTime
+                viewModel.limitTime.observe(viewLifecycleOwner) { limitTime ->
+                    viewModel.compareTime(it[it.size-1].relativeTime, limitTime)
+                }
                 // URLから画像を取得
                 var url = "https://maps.googleapis.com/maps/api/staticmap?center=${it[it.size-1].latitude},${it[it.size-1].longitude}&size=310x640&scale=1&zoom=18&key=AIzaSyA-cfLegBoleKaT2TbU5R4K1uRkzBR6vUQ&markers=color:red|${it[it.size-1].latitude},${it[it.size-1].longitude}"
 
@@ -121,6 +147,73 @@ class MainFragment: Fragment() {
 
         viewModel.limitTime.observe(viewLifecycleOwner) {
             tvLimitTime.text = it
+        }
+
+        viewModel.isOverLimitTime.observe(viewLifecycleOwner) {
+            if (it) {
+                // クリアダイアログを表示
+                dialogClear.visibility      = View.VISIBLE
+                dialogClearUser1.visibility = View.VISIBLE
+                btClearClose.visibility     = View.VISIBLE
+            }
+        }
+
+        // クリアダイアログの閉じるを押した時
+        btClearClose.setOnClickListener {
+            // クリアダイアログを非表示
+            dialogClear.visibility      = View.INVISIBLE
+            dialogClearUser1.visibility = View.INVISIBLE
+            btClearClose.visibility     = View.INVISIBLE
+
+            // Result画面の表示
+            resultBack.visibility    = View.VISIBLE
+            tvResult.visibility      = View.VISIBLE
+            tvWinner.visibility      = View.VISIBLE
+            tvLoser.visibility       = View.VISIBLE
+            winnerUser1.visibility   = View.VISIBLE
+            winnerUser2.visibility   = View.VISIBLE
+            loserUser3.visibility    = View.VISIBLE
+            loserUser4.visibility    = View.VISIBLE
+            btResultClose.visibility = View.VISIBLE
+            // Result以外のものを非表示
+            ivTime.visibility         = View.INVISIBLE
+            tvNow.visibility          = View.INVISIBLE
+            tvLimit.visibility        = View.INVISIBLE
+            tvRelativeTime.visibility = View.INVISIBLE
+            tvLimitTime.visibility    = View.INVISIBLE
+            user1Normal.visibility    = View.INVISIBLE
+            user2Normal.visibility    = View.INVISIBLE
+            user3Normal.visibility    = View.INVISIBLE
+            user4Demon.visibility     = View.INVISIBLE
+            btCaptureOn.visibility    = View.INVISIBLE
+            btSkillOn.visibility      = View.INVISIBLE
+        }
+
+        // Result画面の閉じるを押した時の処理
+        btResultClose.setOnClickListener {
+            // Result画面の非表示
+            resultBack.visibility    = View.INVISIBLE
+            tvResult.visibility      = View.INVISIBLE
+            tvWinner.visibility      = View.INVISIBLE
+            tvLoser.visibility       = View.INVISIBLE
+            winnerUser1.visibility   = View.INVISIBLE
+            winnerUser2.visibility   = View.INVISIBLE
+            loserUser3.visibility    = View.INVISIBLE
+            loserUser4.visibility    = View.INVISIBLE
+            btResultClose.visibility = View.INVISIBLE
+
+            // Result以外のものを表示
+            ivTime.visibility         = View.VISIBLE
+            tvNow.visibility          = View.VISIBLE
+            tvLimit.visibility        = View.VISIBLE
+            tvRelativeTime.visibility = View.VISIBLE
+            tvLimitTime.visibility    = View.VISIBLE
+            user1Normal.visibility    = View.VISIBLE
+            user2Normal.visibility    = View.VISIBLE
+            user3Normal.visibility    = View.VISIBLE
+            user4Demon.visibility     = View.VISIBLE
+            btCaptureOn.visibility    = View.VISIBLE
+            btSkillOn.visibility      = View.VISIBLE
         }
 
         // 捕まったボタンが押された時の処理

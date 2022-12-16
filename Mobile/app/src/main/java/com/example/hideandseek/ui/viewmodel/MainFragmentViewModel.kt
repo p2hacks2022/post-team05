@@ -53,6 +53,14 @@ class MainFragmentViewModel: ViewModel() {
         _limitTime.value = limitTime
     }
 
+    private val _isOverLimitTime = MutableLiveData<Boolean>()
+    val isOverLimitTime: LiveData<Boolean> = _isOverLimitTime
+
+    // 相対時間が制限時間を超えてたらtrueを返す
+    fun compareTime(relativeTime: String, limitTime: String) {
+        _isOverLimitTime.value = relativeTime.substring(0, 2) == limitTime.substring(0, 2) && relativeTime.substring(3, 5) == limitTime.substring(3, 5) && relativeTime.substring(6) > limitTime.substring(6)
+    }
+
     lateinit var location: LiveData<List<User>>
 
     fun getLocation(relativeTime: String, context: Context) {
