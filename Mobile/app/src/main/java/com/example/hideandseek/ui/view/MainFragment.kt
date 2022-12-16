@@ -49,7 +49,9 @@ class MainFragment: Fragment() {
 
         // データが更新されたら表示
         viewModel.allUsersLive.observe(viewLifecycleOwner) {
-            tvRelativeTime.text = it[it.size-1].relativeTime
+            if (it.isNotEmpty()) {
+                tvRelativeTime.text = it[it.size-1].relativeTime
+            }
 
             // URLから画像を取得
             coroutineScope.launch {
