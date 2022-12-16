@@ -66,6 +66,7 @@ class MainFragment: Fragment() {
         // Mapに画像をセット
         viewModel.map.observe(viewLifecycleOwner) {
             ivMap.setImageBitmap(it)
+
         }
 
 

@@ -28,14 +28,22 @@ INSERT INTO `players` VALUES
     3, 4
 );
 
-
 DROP TABLE IF EXISTS `spacetimes`;
 CREATE TABLE `spacetimes` (
     `id` bigint NOT NULL AUTO_INCREMENT,
     `time` time,
-    `latitudea` float NOT NULL,
+    `latitude` float NOT NULL,
     `longtitude` float NOT NULL,
     `altitude` float NOT NULL,
-    `locator` int, --プレイヤーor罠. プレイヤーならid, 罠なら-(id)
+    `obj_id` int,
     PRIMARY KEY (`id`)
+);
+
+-- mock data
+INSERT INTO `spacetimes` VALUES
+(
+    1, "10:00", 1, 1, 1, -1
+),
+(
+    2, "10:00", 1, 1, 1, 1
 );
