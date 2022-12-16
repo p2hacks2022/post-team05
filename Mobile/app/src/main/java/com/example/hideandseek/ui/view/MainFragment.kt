@@ -26,8 +26,8 @@ class MainFragment: Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val viewModel: MainFragmentViewModel by viewModels()
 
-    val locationArray = Array(60) {
-        Array(2) {
+    private val locationArray = Array(60) {
+        Array(3) {
             arrayOfNulls<Double>(2)
         }
     }
@@ -53,6 +53,8 @@ class MainFragment: Fragment() {
             locationArray[i][0][1] = 140.7673718711624 + i*0.00001
             locationArray[i][1][0] = 41.84222707025747 + i*0.00001
             locationArray[i][1][1] = 140.7673718711624 + i*0.00001
+            locationArray[i][2][0] = 41.84192707025747 + i*0.00001
+            locationArray[i][2][1] = 140.7674718711624 + i*0.00001
         }
         
         // Viewの取得
@@ -69,8 +71,8 @@ class MainFragment: Fragment() {
                 // URLから画像を取得
                 var url = "https://maps.googleapis.com/maps/api/staticmap?center=${it[it.size-1].latitude},${it[it.size-1].longitude}&size=350x640&scale=1&zoom=18&key=AIzaSyA-cfLegBoleKaT2TbU5R4K1uRkzBR6vUQ&markers=color:red|${it[it.size-1].latitude},${it[it.size-1].longitude}"
 
-                for (i in 0..1) {
-                    url += "&markers=color:red|${locationArray[it[it.size-1].relativeTime.substring(6).toInt()][i][0]},${locationArray[it[it.size-1].relativeTime.substring(6).toInt()][i][1]}"
+                for (i in 0..2) {
+                    url += "&markers=icon:https://goo.gl/5y3S82|${locationArray[it[it.size-1].relativeTime.substring(6).toInt()][i][0]},${locationArray[it[it.size-1].relativeTime.substring(6).toInt()][i][1]}"
                 }
 
                 // URLから画像を取得
