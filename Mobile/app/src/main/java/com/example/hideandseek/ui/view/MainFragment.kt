@@ -50,8 +50,7 @@ class MainFragment: Fragment() {
         // データが更新されたら表示
         viewModel.allUsersLive.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
-                tvRelativeTime.text = it[0].relativeTime
-
+                tvRelativeTime.text = it[it.size-1].relativeTime
                 // URLから画像を取得
                 coroutineScope.launch {
                     val originalDeferred = coroutineScope.async(Dispatchers.IO) {
