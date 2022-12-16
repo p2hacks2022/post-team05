@@ -28,6 +28,7 @@ class MainFragmentViewModel: ViewModel() {
     private val _limitTime = MutableLiveData<String>()
     val limitTime: LiveData<String> = _limitTime
 
+    // RelativeTime+15分の時間を制限時間とする
     fun setLimitTime(relativeTime: String) {
         var limitTime = ""
         if (relativeTime.substring(3, 5).toInt() < 45) {

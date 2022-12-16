@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -58,9 +60,38 @@ class MainFragment: Fragment() {
         }
         
         // Viewの取得
-        val tvRelativeTime: TextView = binding.tvRelativeTime
-        val tvLimitTime:    TextView = binding.tvLimitTime
-        val ivMap = binding.ivMap
+        // 時間のテキスト
+        val tvRelativeTime:   TextView  = binding.tvRelativeTime
+        val tvLimitTime:      TextView  = binding.tvLimitTime
+        // Map
+        val ivMap:            ImageView = binding.ivMap
+        // 捕まったボタン
+        val btCaptureOn:      ImageView = binding.btCaptureOn
+        val btCaptureOff:     ImageView = binding.btCaptureOff
+        // スキルボタン
+        val btSkillOn:        ImageView = binding.btSkillOn
+        val btSkillOff:       ImageView = binding.btSkillOff
+        // 捕まったか確認するダイアログ
+        val dialogCapture:    ImageView = binding.dialogCapture
+        val ivDemonCapture:   ImageView = binding.dialogCaptureDemon
+        val btCaptureYes:     ImageView = binding.btCaptureYes
+        val btCaptureNo:      ImageView = binding.btCaptureNo
+        // 捕まった後のダイアログ
+        val dialogCaptured:   ImageView = binding.dialogCaptured
+        val ivDemonCaptured:  ImageView = binding.dialogCapturedDemon
+        val ivNormalCaptured: ImageView = binding.dialogCapturedNormal
+        val metalRod:         ImageView = binding.metalRod
+        val btCapturedClose:  ImageView = binding.capturedClose
+        // 観戦中
+        val ivWatching:       ImageView = binding.ivWatching
+        // User normal
+        val user1Normal:      ImageView = binding.user1Normal
+        val user2Normal:      ImageView = binding.user2Normal
+        val user3Normal:      ImageView = binding.user3Normal
+        // User demon
+        val user4Demon:       ImageView = binding.user4Demon
+        // User captured
+        val user1Captured:    ImageView = binding.user1Captured
 
         // データベースからデータを持ってくる
         context?.let { viewModel.setAllUsersLive(it) }
@@ -90,6 +121,63 @@ class MainFragment: Fragment() {
 
         viewModel.limitTime.observe(viewLifecycleOwner) {
             tvLimitTime.text = it
+        }
+
+        // 捕まったボタンが押された時の処理
+        btCaptureOn.setOnClickListener {
+            // ボタンを押された状態にする
+            btCaptureOff.visibility   = View.VISIBLE
+            // ダイアログが出現
+            dialogCapture.visibility  = View.VISIBLE
+            ivDemonCapture.visibility = View.VISIBLE
+            btCaptureYes.visibility   = View.VISIBLE
+            btCaptureNo.visibility    = View.VISIBLE
+
+        }
+
+        btCaptureNo.setOnClickListener {
+            // ボタンを押されていない状態にする
+            btCaptureOff.visibility   = View.INVISIBLE
+            // ダイアログが消える
+            dialogCapture.visibility  = View.INVISIBLE
+            ivDemonCapture.visibility = View.INVISIBLE
+            btCaptureYes.visibility   = View.INVISIBLE
+            btCaptureNo.visibility    = View.INVISIBLE
+        }
+
+        btCaptureYes.setOnClickListener {
+            // ダイアログが消える
+            dialogCapture.visibility  = View.INVISIBLE
+            ivDemonCapture.visibility = View.INVISIBLE
+            btCaptureYes.visibility   = View.INVISIBLE
+            btCaptureNo.visibility    = View.INVISIBLE
+
+            // 捕まったダイアログが出る
+            dialogCaptured.visibility   = View.VISIBLE
+            ivDemonCaptured.visibility  = View.VISIBLE
+            ivNormalCaptured.visibility = View.VISIBLE
+            metalRod.visibility         = View.VISIBLE
+            btCapturedClose.visibility  = View.VISIBLE
+        }
+
+        btCapturedClose.setOnClickListener {
+            // 捕まったダイアログが消える
+            dialogCaptured.visibility   = View.INVISIBLE
+            ivDemonCaptured.visibility  = View.INVISIBLE
+            ivNormalCaptured.visibility = View.INVISIBLE
+            metalRod.visibility         = View.INVISIBLE
+            btCapturedClose.visibility  = View.INVISIBLE
+
+            // 観戦モードになる
+            ivWatching.visibility   = View.VISIBLE
+            btCaptureOff.visibility = View.VISIBLE
+            btCaptureOn.visibility  = View.INVISIBLE
+            btSkillOff.visibility   = View.VISIBLE
+            btSkillOn.visibility    = View.INVISIBLE
+
+            // ステータスが変わる
+            user1Normal.visibility   = View.INVISIBLE
+            user1Captured.visibility = View.VISIBLE
         }
 
         // 特定の時刻の位置情報を表示
