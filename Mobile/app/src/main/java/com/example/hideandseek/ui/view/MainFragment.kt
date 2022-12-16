@@ -51,15 +51,14 @@ class MainFragment: Fragment() {
         viewModel.allUsersLive.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
                 tvRelativeTime.text = it[it.size-1].relativeTime
-            }
-
-            // URLから画像を取得
-            coroutineScope.launch {
-                val originalDeferred = coroutineScope.async(Dispatchers.IO) {
-                    getOriginalBitmap("https://maps.googleapis.com/maps/api/staticmap?center=${it[it.size-1].latitude},${it[it.size-1].longitude}&size=350x640&scale=1&zoom=18&key=AIzaSyA-cfLegBoleKaT2TbU5R4K1uRkzBR6vUQ&markers=color:red|${it[it.size-1].latitude},${it[it.size-1].longitude}")
+                // URLから画像を取得
+                coroutineScope.launch {
+                    val originalDeferred = coroutineScope.async(Dispatchers.IO) {
+                        getOriginalBitmap("https://maps.googleapis.com/maps/api/staticmap?center=${it[it.size-1].latitude},${it[it.size-1].longitude}&size=350x640&scale=1&zoom=18&key=AIzaSyA-cfLegBoleKaT2TbU5R4K1uRkzBR6vUQ&markers=color:red|${it[it.size-1].latitude},${it[it.size-1].longitude}")
+                    }
+                    val originalBitmap = originalDeferred.await()
+                    viewModel.setMap(originalBitmap)
                 }
-                val originalBitmap = originalDeferred.await()
-                viewModel.setMap(originalBitmap)
             }
         }
 

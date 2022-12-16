@@ -144,9 +144,7 @@ class MainActivity : AppCompatActivity() {
                     val gap = viewModel.calculateGap(location)
                     val relativeTime = LocalTime.now().minusNanos(gap)
                     val user = User(0, relativeTime.toString().substring(0, 8), location.longitude, location.latitude)
-                    if (relativeTime.second%10 == 0) {
-                        viewModel.insert(user, applicationContext)
-                    }
+                    viewModel.insert(user, applicationContext)
                     Log.d("LocationCallback", location.speed.toString())
                 }
             }
