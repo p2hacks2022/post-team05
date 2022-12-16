@@ -38,7 +38,9 @@ class MainFragment: Fragment() {
 
         // データが更新されたら表示
         viewModel.allUsersLive.observe(viewLifecycleOwner) {
-            tvRelativeTime.text = it[it.size-1].relativeTime
+            if (it.size > 0) {
+                tvRelativeTime.text = it[it.size - 1].relativeTime
+            }
         }
 
         return root
