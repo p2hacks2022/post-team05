@@ -12,7 +12,7 @@ CREATE TABLE `players` (
     -- 2: 捕まった
     -- 3: 勝利
     -- 4: 鬼
-    `state` int NOT NULL,
+    `status` int NOT NULL,
     PRIMARY KEY (`id`)
 );
 
