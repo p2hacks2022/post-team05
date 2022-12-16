@@ -1,8 +1,8 @@
 ---
-name: Frontend issue
+name: Mobile issue
 about: 機能要望はここ
 title: ""
-labels: ["Frontend"]
+labels: ["Mobile"]
 ---
 
 # 概要
