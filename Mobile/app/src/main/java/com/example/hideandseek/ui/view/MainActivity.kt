@@ -2,16 +2,12 @@ package com.example.hideandseek.ui.view
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.location.Location
-import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.navigation.findNavController
@@ -20,17 +16,11 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.hideandseek.R
 import com.example.hideandseek.data.datasource.local.User
-import com.example.hideandseek.data.datasource.local.UserRoomDatabase
 import com.example.hideandseek.databinding.ActivityMainBinding
 import com.example.hideandseek.ui.viewmodel.MainActivityViewModel
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import java.net.URL
 import java.time.LocalTime
 
 
@@ -112,6 +102,9 @@ class MainActivity : AppCompatActivity() {
             .addOnSuccessListener { location : Location? ->
                 // Got last known location. In some rare situations this can be null
                 if (location != null) {
+                    binding.apply {
+                        viewModel.getTest()
+                    }
                     //ずれと相対時間を計算
                     val gap = viewModel.calculateGap(location)
                     val relativeTime = LocalTime.now().minusNanos(gap)
@@ -132,8 +125,8 @@ class MainActivity : AppCompatActivity() {
         val builder = LocationSettingsRequest.Builder()
             .addLocationRequest(locationRequest)
 
-        val client: SettingsClient = LocationServices.getSettingsClient(this)
-        val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
+        val locationClient: SettingsClient = LocationServices.getSettingsClient(this)
+        val task: Task<LocationSettingsResponse> = locationClient.checkLocationSettings(builder.build())
 
         // 位置情報更新コールバックを定義する
         locationCallback = object : LocationCallback() {
