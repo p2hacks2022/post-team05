@@ -1,11 +1,11 @@
 package player
 
-import "github.com/Hackathon-for-FUN-TeamA/backend/internal/db"
+import "github.com/p2hacks2022/post-team05/internal/model"
 
 // Playerのstatusを更新する
 func UpdateStatus(id, status int) error {
 	// db初期化
-	dbmap, err := db.InitDb()
+	dbmap, err := model.InitDb()
 	if err != nil {
 		return err
 	}

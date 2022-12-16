@@ -49,7 +49,9 @@ class MainFragment: Fragment() {
 
         // データが更新されたら表示
         viewModel.allUsersLive.observe(viewLifecycleOwner) {
-            tvRelativeTime.text = it[it.size-1].relativeTime
+            if (it.size > 0) {
+                tvRelativeTime.text = it[it.size - 1].relativeTime
+            }
 
             // URLから画像を取得
             coroutineScope.launch {
@@ -64,6 +66,7 @@ class MainFragment: Fragment() {
         // Mapに画像をセット
         viewModel.map.observe(viewLifecycleOwner) {
             ivMap.setImageBitmap(it)
+
         }
 
 
