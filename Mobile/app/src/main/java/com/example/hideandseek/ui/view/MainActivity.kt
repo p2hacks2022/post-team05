@@ -116,13 +116,15 @@ class MainActivity : AppCompatActivity() {
                     val gap = viewModel.calculateGap(location)
                     val relativeTime = LocalTime.now().minusNanos(gap)
                     val user = User(0, relativeTime.toString().substring(0, 8), location.longitude, location.latitude)
-                    viewModel.insert(user, applicationContext)
+                    if (relativeTime.second%10 == 0) {
+                        viewModel.insert(user, applicationContext)
+                    }
                     Log.d("LocationTest", location.speed.toString())
                 }
             }
 
         // 位置情報リクエストの設定
-        locationRequest = LocationRequest.Builder(10000)
+        locationRequest = LocationRequest.Builder(1000)
             .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
             .build()
 
@@ -142,7 +144,9 @@ class MainActivity : AppCompatActivity() {
                     val gap = viewModel.calculateGap(location)
                     val relativeTime = LocalTime.now().minusNanos(gap)
                     val user = User(0, relativeTime.toString().substring(0, 8), location.longitude, location.latitude)
-                    viewModel.insert(user, applicationContext)
+                    if (relativeTime.second%10 == 0) {
+                        viewModel.insert(user, applicationContext)
+                    }
                     Log.d("LocationCallback", location.speed.toString())
                 }
             }
