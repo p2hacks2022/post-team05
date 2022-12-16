@@ -115,6 +115,7 @@ class MainActivity : AppCompatActivity() {
                 // Got last known location. In some rare situations this can be null
                 if (location != null) {
 //                    viewModel.resetDatabase(applicationContext)
+                    viewModel.deleteAll(applicationContext)
                     //ずれと相対時間を計算
                     val gap = viewModel.calculateGap(location)
                     val relativeTime = LocalTime.now().minusNanos(gap)

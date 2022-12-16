@@ -25,6 +25,33 @@ class MainFragmentViewModel: ViewModel() {
         allUsersLive = UserRepository(context).allUsers.asLiveData()
     }
 
+    private val _limitTime = MutableLiveData<String>()
+    val limitTime: LiveData<String> = _limitTime
+
+    fun setLimitTime(relativeTime: String) {
+        var limitTime = ""
+        if (relativeTime.substring(3, 5).toInt() < 45) {
+            limitTime = relativeTime.substring(0, 3) + (relativeTime.substring(3, 5).toInt()+15).toString() + relativeTime.substring(5)
+        } else if (relativeTime.substring(3, 5).toInt() < 55) {
+            if (relativeTime.substring(0, 2).toInt() == 23) {
+                limitTime = "00:0"+((relativeTime.substring(3, 5).toInt()+15)%60).toString() + relativeTime.substring(5)
+            } else if (relativeTime.substring(0, 2).toInt() >= 9) {
+                limitTime = (relativeTime.substring(0, 2).toInt()+1).toString()+":0"+((relativeTime.substring(3, 5).toInt()+15)%60).toString() + relativeTime.substring(5)
+            } else {
+                limitTime = "0"+(relativeTime.substring(0, 2).toInt()+1).toString()+":0"+((relativeTime.substring(3, 5).toInt()+15)%60).toString() + relativeTime.substring(5)
+            }
+        } else {
+            if (relativeTime.substring(0, 2).toInt() == 23) {
+                limitTime = "00:"+((relativeTime.substring(3, 5).toInt()+15)%60).toString() + relativeTime.substring(5)
+            } else if (relativeTime.substring(0, 2).toInt() >= 9) {
+                limitTime = (relativeTime.substring(0, 2).toInt()+1).toString()+":"+((relativeTime.substring(3, 5).toInt()+15)%60).toString() + relativeTime.substring(5)
+            } else {
+                limitTime = "0"+(relativeTime.substring(0, 2).toInt()+1).toString()+":"+((relativeTime.substring(3, 5).toInt()+15)%60).toString() + relativeTime.substring(5)
+            }
+        }
+        _limitTime.value = limitTime
+    }
+
     lateinit var location: LiveData<List<User>>
 
     fun getLocation(relativeTime: String, context: Context) {

@@ -59,6 +59,7 @@ class MainFragment: Fragment() {
         
         // Viewの取得
         val tvRelativeTime: TextView = binding.tvRelativeTime
+        val tvLimitTime:    TextView = binding.tvLimitTime
         val ivMap = binding.ivMap
 
         // データベースからデータを持ってくる
@@ -67,6 +68,7 @@ class MainFragment: Fragment() {
         // データが更新されたら表示
         viewModel.allUsersLive.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
+                viewModel.setLimitTime(it[0].relativeTime)
                 tvRelativeTime.text = it[it.size-1].relativeTime
                 // URLから画像を取得
                 var url = "https://maps.googleapis.com/maps/api/staticmap?center=${it[it.size-1].latitude},${it[it.size-1].longitude}&size=310x640&scale=1&zoom=18&key=AIzaSyA-cfLegBoleKaT2TbU5R4K1uRkzBR6vUQ&markers=color:red|${it[it.size-1].latitude},${it[it.size-1].longitude}"
@@ -84,6 +86,10 @@ class MainFragment: Fragment() {
                     viewModel.setMap(originalBitmap)
                 }
             }
+        }
+
+        viewModel.limitTime.observe(viewLifecycleOwner) {
+            tvLimitTime.text = it
         }
 
         // 特定の時刻の位置情報を表示
