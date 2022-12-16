@@ -13,13 +13,110 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <ImageView
+        android:id="@+id/iv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        app:srcCompat="@drawable/text_times"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/description_time" />
+
+    <TextView
+        android:id="@+id/tv_now"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:text="NOW"
+        android:layout_marginStart="40dp"
+        app:layout_constraintTop_toTopOf="@id/iv_time"
+        app:layout_constraintBottom_toBottomOf="@id/iv_time"
+        app:layout_constraintStart_toStartOf="@id/iv_time"/>
+
     <TextView
         android:id="@+id/tv_relative_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="20sp"
+        android:layout_marginStart="12dp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_now"
+        app:layout_constraintStart_toEndOf="@id/tv_now"/>
+
+    <TextView
+        android:id="@+id/tv_limit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:text="LIMIT"
+        android:textColor="#F26363"
+        android:layout_marginEnd="12dp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_now"
+        app:layout_constraintEnd_toStartOf="@+id/tv_limit_time"/>
+
+    <TextView
+        android:id="@+id/tv_limit_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="22:22:22"
+        android:textColor="#F26363"
+        android:layout_marginEnd="40dp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_now"
+        app:layout_constraintEnd_toEndOf="@id/iv_time"/>
+
+    <ImageView
+        android:id="@+id/bt_capture"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        app:srcCompat="@drawable/button_captured_on"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:contentDescription="@string/description_capture_button" />
+
+    <ImageView
+        android:id="@+id/bt_skill"
+        android:layout_width="180dp"
+        android:layout_height="100dp"
+        app:srcCompat="@drawable/button_skill_on"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+        android:id="@+id/user1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/user01_runaway"
+        app:layout_constraintTop_toBottomOf="@+id/iv_time"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <ImageView
+        android:id="@+id/user2"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/user02_runaway"
+        app:layout_constraintTop_toBottomOf="@+id/iv_time"
+        app:layout_constraintStart_toEndOf="@+id/user1"
+        app:layout_constraintEnd_toStartOf="@+id/user3"/>
+
+    <ImageView
+        android:id="@+id/user3"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/user03_runaway"
+        app:layout_constraintTop_toBottomOf="@+id/iv_time"
+        app:layout_constraintEnd_toStartOf="@+id/user4"
+        app:layout_constraintStart_toEndOf="@+id/user2"/>
+
+    <ImageView
+        android:id="@+id/user4"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/user04_oni"
+        app:layout_constraintTop_toBottomOf="@+id/iv_time"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

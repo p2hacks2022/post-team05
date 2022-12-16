@@ -64,6 +64,8 @@ class MainActivity : AppCompatActivity() {
             )
         )
 
+        supportActionBar?.hide()
+
         // BottomNavigationのセットアップ
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
