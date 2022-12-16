@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.location.Location
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
 import com.example.hideandseek.data.datasource.local.User
@@ -47,29 +48,31 @@ class MainActivityViewModel(): ViewModel() {
     fun resetDatabase(context: Context) {
         deleteAll(context)
 
-        for (hour in 22..22) {
-            var relativeTime = ""
+        for (hour in 0..0) {
+            var relativeTime = "00:00:00"
             // hourが一桁の時は前に0をつける
-            relativeTime += if (hour < 10) {
-                "0$hour:"
+            relativeTime = if (hour < 10) {
+                "0$hour:" + relativeTime.substring(3)
             } else {
-                "$hour:"
+                "$hour:" + relativeTime.substring(3)
             }
-            for (minute in 47..49) {
-                // jが一桁の時は前に0をつける
-                relativeTime += if (minute < 10) {
-                    "0$minute:"
+            for (minute in 5..7) {
+                // minuteが一桁の時は前に0をつける
+                relativeTime = if (minute < 10) {
+                    relativeTime.substring(0, 3) + "0$minute:" + relativeTime.substring(6)
                 } else {
-                    "$minute:"
+                    relativeTime.substring(0, 3) + "$minute:" + relativeTime.substring(6)
                 }
                 for (second in 0..59) {
-                    // kが一桁の時は前に0をつける
-                    relativeTime += if (second < 10) {
-                        "$second"
+                    // secondが一桁の時は前に0をつける
+                    relativeTime = if (second < 10) {
+                        relativeTime.substring(0, 6) + "0$second"
                     } else {
-                        "$second"
+                        relativeTime.substring(0, 6) + "$second"
                     }
-                    val user = User(0, relativeTime, 0.0, 0.0)
+                    var user = User(0, relativeTime, 140.7673718711624, 41.84202707025747)
+                    insert(user, context)
+                    user = User(0, relativeTime, 140.7673718711624, 41.84222707025747)
                     insert(user, context)
                 }
             }
