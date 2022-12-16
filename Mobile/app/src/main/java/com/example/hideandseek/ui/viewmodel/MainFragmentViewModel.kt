@@ -38,8 +38,6 @@ class MainFragmentViewModel: ViewModel() {
         _map.value = p0
     }
 
-
-
     suspend fun fetchMap(url: String): Bitmap {
         return MapRepository().fetchMap(url)
     }
