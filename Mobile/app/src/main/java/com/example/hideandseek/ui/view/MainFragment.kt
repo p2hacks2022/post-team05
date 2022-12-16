@@ -35,6 +35,12 @@ class MainFragment: Fragment() {
         }
     }
 
+    private val trapArray = Array(10) {
+        arrayOfNulls<Double>(2)
+    }
+
+    private var trapNumber = 0
+
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     private var width : Int = 0
@@ -130,8 +136,16 @@ class MainFragment: Fragment() {
                 // URLから画像を取得
                 var url = "https://maps.googleapis.com/maps/api/staticmap?center=${it[it.size-1].latitude},${it[it.size-1].longitude}&size=310x640&scale=1&zoom=18&key=AIzaSyA-cfLegBoleKaT2TbU5R4K1uRkzBR6vUQ&markers=color:red|${it[it.size-1].latitude},${it[it.size-1].longitude}"
 
+                // 他のユーザーの位置情報
                 for (i in 0..2) {
                     url += "&markers=color:red|${locationArray[it[it.size-1].relativeTime.substring(6).toInt()][i][0]},${locationArray[it[it.size-1].relativeTime.substring(6).toInt()][i][1]}"
+                }
+
+                // trapの位置情報
+                if (trapNumber > 0) {
+                    for (i in 0 until trapNumber) {
+                        url += "&markers=color:red|${trapArray[i][0]},${trapArray[i][1]}"
+                    }
                 }
 
                 // URLから画像を取得
@@ -271,6 +285,15 @@ class MainFragment: Fragment() {
             // ステータスが変わる
             user1Normal.visibility   = View.INVISIBLE
             user1Captured.visibility = View.VISIBLE
+        }
+
+        // skillボタンが押された時の処理
+        btSkillOn.setOnClickListener {
+            viewModel.allUsersLive.observe(viewLifecycleOwner) {
+                trapArray[trapNumber][0] = it[it.size-1].latitude
+                trapArray[trapNumber][1] = it[it.size-1].longitude
+            }
+            trapNumber += 1
         }
 
         // 特定の時刻の位置情報を表示
