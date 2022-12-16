@@ -122,7 +122,7 @@ class MainActivity : AppCompatActivity() {
             }
 
         // 位置情報リクエストの設定
-        locationRequest = LocationRequest.Builder(10000)
+        locationRequest = LocationRequest.Builder(1000)
             .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
             .build()
 
