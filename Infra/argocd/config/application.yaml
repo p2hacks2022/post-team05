@@ -3,10 +3,13 @@ kind: Application
 metadata:
   annotations:
     argocd-image-updater.argoproj.io/write-back-method: git
-    argocd-image-updater.argoproj.io/image-list: api=docker.io/funera1/hikky-api:latest
-    argocd-image-updater.argoproj.io/api.helm.image-name: param.image.name
-    argocd-image-updater.argoproj.io/api.helm.image-tag: param.image.tag
+    argocd-image-updater.argoproj.io/image-list: api=docker.io/funera1/hikky-api:latest, db=docker.io/funera1/hikky-db:upstream
+    argocd-image-updater.argoproj.io/api.helm.image-name: api.image.name
+    argocd-image-updater.argoproj.io/api.helm.image-tag: api.image.tag
     argocd-image-updater.argoproj.io/api.update-strategy: digest
+    argocd-image-updater.argoproj.io/db.helm.image-name: db.image.name
+    argocd-image-updater.argoproj.io/db.helm.image-tag: db.image.tag
+    argocd-image-updater.argoproj.io/db.update-strategy: digest
   name: hikky-api
   namespace: argocd
 spec:
@@ -14,7 +17,7 @@ spec:
   source:
     repoURL: 'ssh://git@github.com/p2hacks2022/post-team05.git'
     path: Backend/helm
-    targetRevision: release
+    targetRevision: feature/cicd
     helm:
       fileParameters:
         - name: param
