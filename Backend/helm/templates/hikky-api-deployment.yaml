@@ -24,7 +24,8 @@ spec:
         io.kompose.service: hikky-api
     spec:
       containers:
-        - image: funera1/hikky-api
+        - image: "{{ .Values.api.image.name }}:{{ .Values.api.tag }}"
+          pullPolicy: {{ .Valuse.api.image.pullPolicy }}
           name: hikky-api
           ports:
             - containerPort: 8080

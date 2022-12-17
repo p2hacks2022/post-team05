@@ -27,7 +27,7 @@ spec:
         - env:
             - name: MYSQL_ROOT_PASSWORD
               value: passwd
-          image: funera1/hikky-db
+          image: "{{ .Values.db.image.name }}:{{ .Values.image.tag }}"
           name: hikky-db
           ports:
             - containerPort: 3306
