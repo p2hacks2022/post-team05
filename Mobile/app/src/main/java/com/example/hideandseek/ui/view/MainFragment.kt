@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -29,15 +30,24 @@ class MainFragment: Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val viewModel: MainFragmentViewModel by viewModels()
 
-    private val locationArray = Array(60) {
+    // latitude, longitudeのリスト
+    private val locationArray = Array(240) {
         Array(3) {
             arrayOfNulls<Double>(2)
+        }
+    }
+
+    private val statusArray = Array(240) {
+        Array(3) {
+            arrayOfNulls<Int>(2)
         }
     }
 
     private val trapArray = Array(10) {
         arrayOfNulls<Double>(2)
     }
+
+    private val skillTime = arrayOfNulls<String>(10)
 
     private var trapNumber = 0
 
@@ -57,13 +67,33 @@ class MainFragment: Fragment() {
         val root: View = binding.root
 
         // デモ用のリスト作成
-        for (i in 0..59) {
+        for (i in 0..239) {
             locationArray[i][0][0] = 41.84202707025747 + i*0.00001
             locationArray[i][0][1] = 140.7673718711624 + i*0.00001
+            statusArray[i][0][0] = 0
+            statusArray[i][0][1] = 0
             locationArray[i][1][0] = 41.84222707025747 + i*0.00001
             locationArray[i][1][1] = 140.7673718711624 + i*0.00001
+            statusArray[i][1][0] = 0
+            statusArray[i][1][1] = 0
             locationArray[i][2][0] = 41.84192707025747 + i*0.00001
             locationArray[i][2][1] = 140.7674718711624 + i*0.00001
+            statusArray[i][2][0] = 1
+            statusArray[i][2][1] = 0
+            if (i > 60) {
+                locationArray[i][0][0] = 41.84202707025747 - i*0.000001
+                locationArray[i][0][1] = 140.7673718711624 - i*0.00001
+                statusArray[i][0][0] = 0
+                statusArray[i][0][1] = 0
+                locationArray[i][1][0] = 41.84222707025747 - i*0.000001
+                locationArray[i][1][1] = 140.7673718711624 - i*0.000015
+                statusArray[i][1][0] = 0
+                statusArray[i][1][1] = 1
+                locationArray[i][2][0] = 41.84192707025747 - i*0.000001
+                locationArray[i][2][1] = 140.7674718711624 - i*0.000015
+                statusArray[i][2][0] = 1
+                statusArray[i][2][1] = 0
+            }
         }
         
         // Viewの取得
@@ -79,8 +109,9 @@ class MainFragment: Fragment() {
         val btCaptureOn:      ImageView = binding.btCaptureOn
         val btCaptureOff:     ImageView = binding.btCaptureOff
         // スキルボタン
-        val btSkillOn:        ImageView = binding.btSkillOn
-        val btSkillOff:       ImageView = binding.btSkillOff
+        val btSkillOn:        ImageView   = binding.btSkillOn
+        val btSkillOff:       ImageView   = binding.btSkillOff
+        val progressSkill:    ProgressBar = binding.progressSkill
         // 捕まったか確認するダイアログ
         val dialogCapture:    ImageView = binding.dialogCapture
         val ivDemonCapture:   ImageView = binding.dialogCaptureDemon
@@ -134,19 +165,43 @@ class MainFragment: Fragment() {
                     viewModel.compareTime(it[it.size-1].relativeTime, limitTime)
                 }
                 // URLから画像を取得
-                var url = "https://maps.googleapis.com/maps/api/staticmap?center=${it[it.size-1].latitude},${it[it.size-1].longitude}&size=310x640&scale=1&zoom=18&key=AIzaSyA-cfLegBoleKaT2TbU5R4K1uRkzBR6vUQ&markers=color:red|${it[it.size-1].latitude},${it[it.size-1].longitude}"
+                var url = "https://maps.googleapis.com/maps/api/staticmap" +
+                        "?center=${it[it.size-1].latitude},${it[it.size-1].longitude}" +
+                        "&size=310x640&scale=1" +
+                        "&zoom=18" +
+                        "&key=AIzaSyA-cfLegBoleKaT2TbU5R4K1uRkzBR6vUQ" +
+                        "&markers=icon:https://onl.tw/FkXBADq|${it[it.size-1].latitude},${it[it.size-1].longitude}"
 
                 // 他のユーザーの位置情報
                 for (i in 0..2) {
-                    url += "&markers=color:red|${locationArray[it[it.size-1].relativeTime.substring(6).toInt()][i][0]},${locationArray[it[it.size-1].relativeTime.substring(6).toInt()][i][1]}"
+                    var iconUrl = "https://onl.tw/3n6JcpK"
+                    if (statusArray[it[it.size-1].relativeTime.substring(6).toInt()*2][i][0] == 1) {
+                        iconUrl = "https://onl.tw/nPGwaP9"
+                    }
+                    url += "&markers=icon:" + iconUrl + "|${locationArray[it[it.size-1].relativeTime.substring(6).toInt()*2][i][0]},${locationArray[it[it.size-1].relativeTime.substring(6).toInt()][i][1]}"
                 }
 
                 // trapの位置情報
                 if (trapNumber > 0) {
                     for (i in 0 until trapNumber) {
-                        url += "&markers=color:red|${trapArray[i][0]},${trapArray[i][1]}"
+                        url += "&markers=icon:https://onl.tw/CxjsiH1|${trapArray[i][0]},${trapArray[i][1]}"
+                    }
+                    skillTime[trapNumber-1]?.let { it1 ->
+                        viewModel.compareSkillTime(it[it.size-1].relativeTime,
+                            it1
+                        )
+                        progressSkill.progress = viewModel.howProgressSkillTime(it[it.size-1].relativeTime,
+                            it1
+                        )
                     }
                 }
+
+                // statusの変更
+//                for (i in 0..2) {
+//                    if (statusArray[it[it.size-1].relativeTime.substring(6).toInt()*2][i][0] == 1) {
+//
+//                    }
+//                }
 
                 // URLから画像を取得
                 coroutineScope.launch {
@@ -292,8 +347,24 @@ class MainFragment: Fragment() {
             viewModel.allUsersLive.observe(viewLifecycleOwner) {
                 trapArray[trapNumber][0] = it[it.size-1].latitude
                 trapArray[trapNumber][1] = it[it.size-1].longitude
+                skillTime[trapNumber]    = it[it.size-1].relativeTime
             }
+            viewModel.setIsOverSkillTime(false)
             trapNumber += 1
+        }
+
+        viewModel.isOverSkillTime.observe(viewLifecycleOwner) {
+            if (it) {
+                btSkillOn.visibility     = View.VISIBLE
+                btSkillOff.visibility    = View.INVISIBLE
+                progressSkill.visibility = View.INVISIBLE
+            } else {
+                btSkillOn.visibility     = View.INVISIBLE
+                btSkillOff.visibility    = View.VISIBLE
+                progressSkill.visibility = View.VISIBLE
+
+                progressSkill.max = 60
+            }
         }
 
         // 特定の時刻の位置情報を表示
