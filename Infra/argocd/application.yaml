@@ -22,7 +22,7 @@ spec:
       valueFiles:
         - values.yaml
   destination:
-    server: https://35.224.244.83
+    server: https://kubernetes.default.svc
     namespace: hikky
   syncPolicy:
     automated:
