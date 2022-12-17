@@ -1,0 +1,63 @@
+# .github/workflows/build.yml
+on: 
+  pull_request:
+    types:
+      - closed
+    paths:
+      - 'Backend/api'
+      - 'Backend/db'
+    branches:
+      - 'release'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      # git commit and push
+      - name: Commit files
+        run: |
+          git config --local user.email ${{ secrets.GH_EMAIL }}
+          git config --local user.name ${{ secrets.GH_NAME }}
+          git checkout release
+          git merge ${{ github.head_ref }}
+
+      - name: Commit & Push changes
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
+          branch: 'release'
+
+      # docker build and push
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and push hikky-api
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          context: .Backend/api
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/hikky-api:latest
+
+      - name: Build and push hikky-db
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          context: .Backend/db
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/hikky-db:latest
+    
