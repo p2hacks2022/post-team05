@@ -14,7 +14,7 @@ spec:
   source:
     repoURL: 'ssh://git@github.com/p2hacks2022/post-team05.git'
     path: Backend/helm
-    targetRevision: release
+    targetRevision: feature/cicd
     helm:
       fileParameters:
         - name: param
