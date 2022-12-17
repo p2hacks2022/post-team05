@@ -24,7 +24,7 @@ spec:
         io.kompose.service: hikky-api
     spec:
       containers:
-        - image: "{{ .Values.api.image.name }}:{{ .Values.api.tag }}"
+        - image: "{{ .Values.api.image.name }}:{{ .Values.api.image.tag }}"
           pullPolicy: {{ .Valuse.api.image.pullPolicy }}
           name: hikky-api
           ports:

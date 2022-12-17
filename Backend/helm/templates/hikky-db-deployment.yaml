@@ -27,7 +27,8 @@ spec:
         - env:
             - name: MYSQL_ROOT_PASSWORD
               value: passwd
-          image: "{{ .Values.db.image.name }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.db.image.name }}:{{ .Values.db.image.tag }}"
+          pullPolicy: {{ .Values.db.image.pullPolicy }}
           name: hikky-db
           ports:
             - containerPort: 3306
