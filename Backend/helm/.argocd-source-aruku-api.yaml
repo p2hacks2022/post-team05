@@ -1,8 +1,0 @@
-helm:
-  parameters:
-  - name: image.name
-    value: docker.io/funera1/aruku-db
-    forcestring: true
-  - name: image.tag
-    value: latest@dummy
-    forcestring: true
