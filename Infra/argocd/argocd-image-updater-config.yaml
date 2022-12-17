@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-image-updater-config
+data:
+  log.level: debug
+  applications_api: argocd
+  # The address of Argo CD API endpoint - defaults to argocd-server.argocd
+  argocd.server_addr: 35.223.215.231
+  # Whether to use GRPC-web protocol instead of GRPC over HTTP/2
+  argocd.grpc_web: "true"
+  # Whether to ignore invalid TLS cert from Argo CD API endpoint
+  argocd.insecure: "false"
+  # Whether to use plain text connection (http) instead of TLS (https)
+  argocd.plaintext: "false"
+  git.commit-message-template: |
+    build: automatic update of {{ .AppName }}
+
+    {{ range .AppChanges -}}
+    updates image {{ .Image }} tag '{{ .OldTag }}' to '{{ .NewTag }}'
+    {{ end  -}}

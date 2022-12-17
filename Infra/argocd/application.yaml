@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd-image-updater.argoproj.io/write-back-method: git
+    argocd-image-updater.argoproj.io/image-list: api=docker.io/funera1/hikky-api:latest
+    argocd-image-updater.argoproj.io/api.helm.image-name: param.image.name
+    argocd-image-updater.argoproj.io/api.helm.image-tag: param.image.tag
+    argocd-image-updater.argoproj.io/api.update-strategy: digest
+  name: aruku-api
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'ssh://git@github.com/p2hacks2022/post-team05.git'
+    path: Backend/helm
+    targetRevision: release
+    helm:
+      fileParameters:
+        - name: param
+          path: .argocd-source-hikky-api.yaml
+      valueFiles:
+        - values.yaml
+  destination:
+    server: https://35.224.244.83
+    namespace: hikky
+  syncPolicy:
+    automated:
+      prune: true
