@@ -71,7 +71,11 @@ class MainFragmentViewModel: ViewModel() {
     }
 
     fun howProgressSkillTime(relativeTime: String, skillTime: String): Int {
-        return (60+relativeTime.substring(6).toInt()-skillTime.substring(6).toInt())%60
+        if (relativeTime.substring(6).toInt() < skillTime.substring(6).toInt()) {
+            return (60+relativeTime.substring(6).toInt()-skillTime.substring(6).toInt())%60
+        } else {
+            return relativeTime.substring(6).toInt()-skillTime.substring(6).toInt()
+        }
     }
 
     fun setIsOverSkillTime(p0: Boolean) {
