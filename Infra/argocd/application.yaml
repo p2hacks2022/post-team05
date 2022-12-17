@@ -7,7 +7,7 @@ metadata:
     argocd-image-updater.argoproj.io/api.helm.image-name: param.image.name
     argocd-image-updater.argoproj.io/api.helm.image-tag: param.image.tag
     argocd-image-updater.argoproj.io/api.update-strategy: digest
-  name: aruku-api
+  name: hikky-api
   namespace: argocd
 spec:
   project: default
@@ -22,7 +22,7 @@ spec:
       valueFiles:
         - values.yaml
   destination:
-    server: https://35.224.244.83
+    server: https://kubernetes.default.svc
     namespace: hikky
   syncPolicy:
     automated:
