@@ -61,6 +61,23 @@ class MainFragmentViewModel: ViewModel() {
         _isOverLimitTime.value = relativeTime.substring(0, 2) == limitTime.substring(0, 2) && relativeTime.substring(3, 5) == limitTime.substring(3, 5) && relativeTime.substring(6) > limitTime.substring(6)
     }
 
+    private val _isOverSkillTime = MutableLiveData<Boolean>()
+    val isOverSkillTime: LiveData<Boolean> = _isOverSkillTime
+
+    fun compareSkillTime(relativeTime: String, skillTime: String) {
+        if (relativeTime.substring(6, 7) == skillTime.substring(6, 7)) {
+            _isOverSkillTime.value = relativeTime.substring(3, 5).toInt() > skillTime.substring(3, 5).toInt()
+        }
+    }
+
+    fun howProgressSkillTime(relativeTime: String, skillTime: String): Int {
+        return (60+relativeTime.substring(6).toInt()-skillTime.substring(6).toInt())%60
+    }
+
+    fun setIsOverSkillTime(p0: Boolean) {
+        _isOverSkillTime.value = p0
+    }
+
     lateinit var location: LiveData<List<User>>
 
     fun getLocation(relativeTime: String, context: Context) {

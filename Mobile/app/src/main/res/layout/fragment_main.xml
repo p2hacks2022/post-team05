@@ -388,6 +388,18 @@
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <ProgressBar
+        android:id="@+id/progress_skill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_marginBottom="24dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/bt_skill_off"
+        app:layout_constraintStart_toStartOf="@+id/bt_skill_off"
+        app:layout_constraintEnd_toEndOf="@+id/bt_skill_off"
+        android:visibility="invisible"/>
+
     <ImageView
         android:id="@+id/user1_normal"
         android:layout_width="72dp"
