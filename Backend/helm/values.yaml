@@ -5,12 +5,12 @@ replicaCount: 1
 
 api:
   image:
-    name: "docker.io/funera1/aruku-api"
+    name: "docker.io/funera1/hikky-api"
     tag: "latest"
     pullPolicy: Always
 
 db:
   image: 
-    name: "docker.io/funera1/aruku-db"
+    name: "docker.io/funera1/hikky-db"
     tag: "latest"
     pullPolicy: IfNotPresent
