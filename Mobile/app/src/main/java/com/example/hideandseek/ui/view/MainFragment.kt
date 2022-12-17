@@ -134,11 +134,17 @@ class MainFragment: Fragment() {
                     viewModel.compareTime(it[it.size-1].relativeTime, limitTime)
                 }
                 // URLから画像を取得
-                var url = "https://maps.googleapis.com/maps/api/staticmap?center=${it[it.size-1].latitude},${it[it.size-1].longitude}&size=310x640&scale=1&zoom=18&key=AIzaSyA-cfLegBoleKaT2TbU5R4K1uRkzBR6vUQ&markers=color:red|${it[it.size-1].latitude},${it[it.size-1].longitude}"
+                var url = "https://maps.googleapis.com/maps/api/staticmap" +
+                        "?center=${it[it.size-1].latitude},${it[it.size-1].longitude}" +
+                        "&size=310x640&scale=1" +
+                        "&zoom=18" +
+                        "&key=AIzaSyA-cfLegBoleKaT2TbU5R4K1uRkzBR6vUQ" +
+                        "&markers=color:red|${it[it.size-1].latitude},${it[it.size-1].longitude}"
 
                 // 他のユーザーの位置情報
                 for (i in 0..2) {
-                    url += "&markers=color:red|${locationArray[it[it.size-1].relativeTime.substring(6).toInt()][i][0]},${locationArray[it[it.size-1].relativeTime.substring(6).toInt()][i][1]}"
+                    var iconUrl = "https://lh3.googleusercontent.com/OTieo1N4PABv4Y55aYqeAsJeAz77FFsl5yyvibj0koECl0yeJGbZ93gsYzXVurL9S3IhAQbJQ4dw9jT0081SEgFiD4_7OSUGGVO5mqiW7ES8Q_GQYMi80SZcwVsXnCKpjVZq8IKZghWRKqeHjBYCZeq1H2tN0O1FxnlkjEfQWN1-dCVoo8lhTwVRr59pFh2Ys_vdV-zwVlBlmJZkWE26Wm-DUgHHVFVyieFKHmWHNrejrmhKhKabuFva6kdlq3b9UxMvAz7foJjLV7Y-R6JGLNqPbaFx5yGYGymBzdlrSTVMwzmKK7epboMoWAk_3ET4hOo7EpLLdyblW3mS42tc5oEH0KhbQRpl3dFnuNYm3YZFe9X173QvncVgdWai4oxGtK5bGK8MfJE2RWU1ZsV2AZzmTVlA0ooyP0Y8dRn0Le3r1mDUFkOECetLyl8ESPSDl90686r05YHKMyKfLMUsyOmxKKrnfGQDRzuF-5ACu2mliUQz9WiK9C8U5R6fDMZkM0xoH9fcS0yN9MFfIANh6u3e1iONqxNBMeml9QAjco-_ZbZqKnP0nTkCRWxfFocKsByfLZI7b_7OBORJjKc5vIwCQMjvcTznNJOUkxe9mIU2DYmq6bZ1PXHeiyk9HvWEqeGVJCKM9iQ1ER_4w7ox7oJMBXwSyjYWiXykTEM0vBDIwoBqmidSB1Guo1fwmZpQC75wA7FyhthWxdGGugeCZHUTa0GiInmH96o0chgInolI6plrCgLy8YMWKnR24uw0DRgx7fzh-6ZE7iqwZR5asOdgyhHns_Pq9WqzP44pcjrFTMjhPb5n2YroQoLKh0FH0l_9SEQ-zDSrjDhH4ccuj8NlQNtvwAnPg9CxZzrSaLEzDtW6DA2n9LBE9RzP7eMREagTXo4va4FNLhjaLq9G7_w4bzu590WGAuXIhsHWSHMkF4oP_kBFNeZ4SIXXZFWFcxR-6WZzHNGb5igb-P7ZJ86D5f8iTvR9oGxxiaN_l9R39R0K2gUg=w60-h61-no?authuser=0"
+                    url += "&markers=icon:" + iconUrl + "|${locationArray[it[it.size-1].relativeTime.substring(6).toInt()][i][0]},${locationArray[it[it.size-1].relativeTime.substring(6).toInt()][i][1]}"
                 }
 
                 // trapの位置情報
