@@ -30,6 +30,17 @@ class MainFragment: Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val viewModel: MainFragmentViewModel by viewModels()
 
+    // マップに表示するのに必要なパラメータ
+    data class PinData (
+        var latitude: Double,
+        var longitude: Double,
+        var status: Int
+    )
+    // p[time][user_id] = (lat, lng, status)
+    private val pinDataArray: Array<Array<PinData?>> = Array(240) {
+        arrayOfNulls<PinData>(3)
+    }
+
     // latitude, longitudeのリスト
     private val locationArray = Array(240) {
         Array(3) {
@@ -66,33 +77,39 @@ class MainFragment: Fragment() {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+
         // デモ用のリスト作成
         for (i in 0..239) {
-            locationArray[i][0][0] = 41.84202707025747 + i*0.00001
-            locationArray[i][0][1] = 140.7673718711624 + i*0.00001
-            statusArray[i][0][0] = 0
-            statusArray[i][0][1] = 0
-            locationArray[i][1][0] = 41.84222707025747 + i*0.00001
-            locationArray[i][1][1] = 140.7673718711624 + i*0.00001
-            statusArray[i][1][0] = 0
-            statusArray[i][1][1] = 0
-            locationArray[i][2][0] = 41.84192707025747 + i*0.00001
-            locationArray[i][2][1] = 140.7674718711624 + i*0.00001
-            statusArray[i][2][0] = 1
-            statusArray[i][2][1] = 0
+            // player 0
+            pinDataArray[i][0]!!.latitude = 41.84202707025747 + i*0.00001
+            pinDataArray[i][0]!!.longitude = 140.7673718711624 + i*0.00001
+            pinDataArray[i][0]!!.status= 0
+
+            // player 1
+            pinDataArray[i][1]!!.latitude = 41.84222707025747 + i*0.00001
+            pinDataArray[i][1]!!.longitude= 140.7673718711624 + i*0.00001
+            pinDataArray[i][1]!!.status= 0
+
+            // player 2
+            pinDataArray[i][2]!!.latitude = 41.84192707025747 + i*0.00001
+            pinDataArray[i][2]!!.longitude = 140.7674718711624 + i*0.00001
+            pinDataArray[i][2]!!.status = 1
+
             if (i > 60) {
-                locationArray[i][0][0] = 41.84202707025747 - i*0.000001
-                locationArray[i][0][1] = 140.7673718711624 - i*0.00001
-                statusArray[i][0][0] = 0
-                statusArray[i][0][1] = 0
-                locationArray[i][1][0] = 41.84222707025747 - i*0.000001
-                locationArray[i][1][1] = 140.7673718711624 - i*0.000015
-                statusArray[i][1][0] = 0
-                statusArray[i][1][1] = 1
-                locationArray[i][2][0] = 41.84192707025747 - i*0.000001
-                locationArray[i][2][1] = 140.7674718711624 - i*0.000015
-                statusArray[i][2][0] = 1
-                statusArray[i][2][1] = 0
+                // player 0
+                pinDataArray[i][0]!!.latitude = 41.84202707025747 - i*0.000001
+                pinDataArray[i][0]!!.longitude = 140.7673718711624 - i*0.00001
+                pinDataArray[i][0]!!.status = 0
+
+                // player 1
+                pinDataArray[i][1]!!.latitude = 41.84222707025747 - i*0.000001
+                pinDataArray[i][1]!!.longitude = 140.7673718711624 - i*0.000015
+                pinDataArray[i][1]!!.status = 0
+
+                // player 2
+                pinDataArray[i][2]!!.latitude = 41.84192707025747 - i*0.000001
+                pinDataArray[i][2]!!.longitude = 140.7674718711624 - i*0.000015
+                pinDataArray[i][2]!!.status = 1
             }
         }
         
