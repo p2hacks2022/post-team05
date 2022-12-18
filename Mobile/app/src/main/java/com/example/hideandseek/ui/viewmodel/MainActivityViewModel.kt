@@ -22,7 +22,19 @@ import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
-class MainActivityViewModel(): ViewModel() {
+class MainActivityViewModel: ViewModel() {
+
+    private lateinit var relativeTime: LocalTime
+
+    // relativeTimeの初期値（アプリを起動したときのLocalTime）をセットする
+    fun setUpRelativeTime(nowTime: LocalTime) {
+        relativeTime = nowTime
+    }
+
+    fun calculateRelativeTime(gap: Long) {
+        Log.d("relativeTime", relativeTime.toString())
+        relativeTime = relativeTime.minusNanos(gap).plusSeconds(1)
+    }
 
     // 特殊相対性理論によりずれを計算する
     fun calculateGap(location: Location): Long {
@@ -30,13 +42,15 @@ class MainActivityViewModel(): ViewModel() {
         return  (1000000000 * (1 - sqrt(1 - (location.speed / 10).pow(2)))).roundToInt().toLong()
     }
 
-    // Roomデータベースにuserデータを送信
-    fun insert(user: User, context: Context) = viewModelScope.launch {
+    // ActivityからrelativeTimeとlocationを受け取り、Roomデータベースにuserデータとして送信
+    fun insert(location: Location, context: Context) = viewModelScope.launch {
+        val user = User(0, relativeTime.toString().substring(0, 8), location.longitude, location.latitude)
         withContext(Dispatchers.IO) {
             UserRepository(context).insert(user)
         }
     }
 
+    // Userデータベースのデータを全消去
     fun deleteAll(context: Context) = viewModelScope.launch {
         withContext(Dispatchers.IO) {
             UserRepository(context).deleteAll()
