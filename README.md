@@ -45,15 +45,6 @@ EinStealth. (EinsteinとStealthから)
 **EinStealth紹介用webサイト**
 
 リンク貼ってください
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/24e0f6c6-1d3e-4986-9476-af6e1b7a379e/Untitled.png)
-
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3d3bcdc9-be54-4c7f-ad49-01d41804b268/Untitled.png)
-
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/57a479ba-e49d-41da-8196-32e4e389f43a/Untitled.png)
-
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/7929bfa6-713e-4927-beaf-4fc49d6f47ec/Untitled.png)
-
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/176b3622-1055-4ae7-98e6-bcef8ffe4464/Untitled.png)
 
 ## 開発体制
 
