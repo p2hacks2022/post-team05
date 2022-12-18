@@ -1,0 +1,14 @@
+helm:
+  parameters:
+  - name: api.image.name
+    value: docker.io/funera1/hikky-api
+    forcestring: true
+  - name: api.image.tag
+    value: latest@sha256:c56ffd3ddc1fd053570dcdca008907a460ebd3666ea92a639b807161ddfd467b
+    forcestring: true
+  - name: db.image.name
+    value: docker.io/funera1/hikky-db
+    forcestring: true
+  - name: db.image.tag
+    value: upstream@sha256:306893ae8c8d861a99dbf32483c75e95eaebbee80cd92f8de25e06dcb5ea8cc7
+    forcestring: true
