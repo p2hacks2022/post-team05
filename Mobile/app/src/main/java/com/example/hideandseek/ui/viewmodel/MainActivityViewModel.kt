@@ -19,17 +19,15 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalTime
 import kotlin.math.pow
+import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
 class MainActivityViewModel(): ViewModel() {
 
-    // 現在自国とのずれをnano秒でもつ
-    var gap: Long = 0
-
     // 特殊相対性理論によりずれを計算する
     fun calculateGap(location: Location): Long {
-        gap += 1000000000*(1-sqrt(1-(location.speed/100).pow(2))).toLong()
-        return gap
+        Log.d("GAP", "speed: ${location.speed}, calc: ${(1000000000 * (1 - sqrt(1 - (location.speed / 10).pow(2)))).roundToInt().toLong()}")
+        return  (1000000000 * (1 - sqrt(1 - (location.speed / 10).pow(2)))).roundToInt().toLong()
     }
 
     // Roomデータベースにuserデータを送信
@@ -42,40 +40,6 @@ class MainActivityViewModel(): ViewModel() {
     fun deleteAll(context: Context) = viewModelScope.launch {
         withContext(Dispatchers.IO) {
             UserRepository(context).deleteAll()
-        }
-    }
-
-    fun resetDatabase(context: Context) {
-        deleteAll(context)
-
-        for (hour in 0..0) {
-            var relativeTime = "00:00:00"
-            // hourが一桁の時は前に0をつける
-            relativeTime = if (hour < 10) {
-                "0$hour:" + relativeTime.substring(3)
-            } else {
-                "$hour:" + relativeTime.substring(3)
-            }
-            for (minute in 5..7) {
-                // minuteが一桁の時は前に0をつける
-                relativeTime = if (minute < 10) {
-                    relativeTime.substring(0, 3) + "0$minute:" + relativeTime.substring(6)
-                } else {
-                    relativeTime.substring(0, 3) + "$minute:" + relativeTime.substring(6)
-                }
-                for (second in 0..59) {
-                    // secondが一桁の時は前に0をつける
-                    relativeTime = if (second < 10) {
-                        relativeTime.substring(0, 6) + "0$second"
-                    } else {
-                        relativeTime.substring(0, 6) + "$second"
-                    }
-                    var user = User(0, relativeTime, 140.7673718711624, 41.84202707025747)
-                    insert(user, context)
-                    user = User(0, relativeTime, 140.7673718711624, 41.84222707025747)
-                    insert(user, context)
-                }
-            }
         }
     }
 }

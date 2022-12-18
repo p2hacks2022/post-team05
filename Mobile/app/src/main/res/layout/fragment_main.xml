@@ -13,13 +13,442 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <ImageView
+        android:id="@+id/iv_eye"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_trap"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="#1E1E1E"
+        android:visibility="invisible"
+        android:src="@drawable/eye"/>
+
+    <TextView
+        android:id="@+id/tv_trap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="罠が解除されるまで"
+        android:textSize="20sp"
+        android:textColor="#FFFFFF"
+        android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        app:srcCompat="@drawable/text_times"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/description_time" />
+
+    <TextView
+        android:id="@+id/tv_now"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:text="NOW"
+        android:layout_marginStart="40dp"
+        app:layout_constraintTop_toTopOf="@id/iv_time"
+        app:layout_constraintBottom_toBottomOf="@id/iv_time"
+        app:layout_constraintStart_toStartOf="@id/iv_time"/>
+
     <TextView
         android:id="@+id/tv_relative_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_marginStart="12dp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_now"
+        app:layout_constraintStart_toEndOf="@id/tv_now"/>
+
+    <TextView
+        android:id="@+id/tv_limit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:text="LIMIT"
+        android:textColor="#F26363"
+        android:layout_marginEnd="12dp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_now"
+        app:layout_constraintEnd_toStartOf="@+id/tv_limit_time"/>
+
+    <TextView
+        android:id="@+id/tv_limit_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="#F26363"
+        android:layout_marginEnd="40dp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_now"
+        app:layout_constraintEnd_toEndOf="@id/iv_time"/>
+
+    <ImageView
+        android:id="@+id/dialog_clear"
+        android:layout_width="380dp"
+        android:layout_height="332dp"
+        app:layout_constraintTop_toBottomOf="@+id/user1_normal"
+        app:layout_constraintBottom_toTopOf="@+id/bt_capture_on"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible"
+        android:src="@drawable/text_clear"/>
+
+    <ImageView
+        android:id="@+id/dialog_clear_user1"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintTop_toTopOf="@+id/dialog_clear"
+        app:layout_constraintBottom_toBottomOf="@+id/dialog_clear"
+        app:layout_constraintStart_toStartOf="@+id/dialog_clear"
+        app:layout_constraintEnd_toEndOf="@+id/dialog_clear"
+        android:visibility="invisible"
+        android:src="@drawable/user01_clear"/>
+
+    <ImageView
+        android:id="@+id/clear_close"
+        android:layout_width="160dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintStart_toStartOf="@+id/dialog_clear"
+        app:layout_constraintEnd_toEndOf="@id/dialog_clear"
+        app:layout_constraintBottom_toBottomOf="@+id/dialog_clear"
+        android:visibility="invisible"
+        android:src="@drawable/button_close"/>
+
+    <ImageView
+        android:id="@+id/result_back"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        android:scaleY="2"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible"
+        android:src="@drawable/text_null"/>
+
+    <TextView
+        android:id="@+id/tv_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RESULT"
+        android:textSize="32sp"
+        app:layout_constraintTop_toTopOf="@+id/user1_normal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:id="@+id/tv_winner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="WINNER"
+        android:textSize="32sp"
+        android:layout_marginStart="32dp"
+        app:layout_constraintTop_toTopOf="@+id/result_back"
+        app:layout_constraintBottom_toTopOf="@+id/tv_loser"
+        app:layout_constraintStart_toStartOf="@+id/result_back"
+        android:visibility="invisible"/>
+
+    <ImageView
+        android:id="@+id/winner_user1"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        app:layout_constraintTop_toBottomOf="@+id/tv_winner"
+        app:layout_constraintBottom_toTopOf="@id/tv_loser"
+        app:layout_constraintStart_toStartOf="@+id/tv_winner"
+        android:visibility="invisible"
+        android:src="@drawable/user01_normal"/>
+
+    <ImageView
+        android:id="@+id/winner_user2"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="12dp"
+        app:layout_constraintTop_toBottomOf="@+id/tv_winner"
+        app:layout_constraintBottom_toTopOf="@id/tv_loser"
+        app:layout_constraintStart_toEndOf="@+id/winner_user1"
+        android:visibility="invisible"
+        android:src="@drawable/user02_normal"/>
+
+    <TextView
+        android:id="@+id/tv_loser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LOSER"
+        android:textSize="32sp"
+        android:layout_marginStart="32dp"
+        app:layout_constraintTop_toTopOf="@+id/result_back"
+        app:layout_constraintBottom_toBottomOf="@+id/result_back"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="@+id/result_back"/>
+
+    <ImageView
+        android:id="@+id/loser_user3"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@+id/tv_loser"
+        app:layout_constraintStart_toStartOf="@+id/tv_winner"
+        android:visibility="invisible"
+        android:src="@drawable/user03_normal"/>
+
+    <ImageView
+        android:id="@+id/loser_user4"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="12dp"
+        app:layout_constraintTop_toBottomOf="@+id/tv_loser"
+        app:layout_constraintStart_toEndOf="@+id/loser_user3"
+        android:visibility="invisible"
+        android:src="@drawable/user04_normal"/>
+
+    <ImageView
+        android:id="@+id/bt_result_close"
+        android:layout_width="160dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="52dp"
+        app:layout_constraintBottom_toBottomOf="@+id/result_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible"
+        android:src="@drawable/button_close"/>
+
+    <ImageView
+        android:id="@+id/dialog_capture"
+        android:layout_width="380dp"
+        android:layout_height="332dp"
+        app:layout_constraintTop_toBottomOf="@+id/user1_normal"
+        app:layout_constraintBottom_toTopOf="@+id/bt_capture_on"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible"
+        android:src="@drawable/text_captureboolean"/>
+
+    <ImageView
+        android:id="@+id/dialog_capture_demon"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintTop_toTopOf="@+id/dialog_capture"
+        app:layout_constraintBottom_toBottomOf="@+id/dialog_capture"
+        app:layout_constraintStart_toStartOf="@+id/dialog_capture"
+        app:layout_constraintEnd_toEndOf="@+id/dialog_capture"
+        android:visibility="invisible"
+        android:src="@drawable/user04_oni"/>
+    
+    <ImageView
+        android:id="@+id/bt_capture_yes"
+        android:layout_width="160dp"
+        android:layout_height="80dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintEnd_toEndOf="@+id/dialog_capture"
+        app:layout_constraintBottom_toBottomOf="@+id/dialog_capture"
+        android:visibility="invisible"
+        android:src="@drawable/button_yes"/>
+
+    <ImageView
+        android:id="@+id/bt_capture_no"
+        android:layout_width="160dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintStart_toStartOf="@+id/dialog_capture"
+        app:layout_constraintBottom_toBottomOf="@+id/dialog_capture"
+        android:visibility="invisible"
+        android:src="@drawable/button_no"/>
+
+    <ImageView
+        android:id="@+id/dialog_captured"
+        android:layout_width="380dp"
+        android:layout_height="332dp"
+        app:layout_constraintTop_toBottomOf="@+id/user1_normal"
+        app:layout_constraintBottom_toTopOf="@+id/bt_capture_on"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible"
+        android:src="@drawable/text_captured"/>
+
+    <ImageView
+        android:id="@+id/dialog_captured_demon"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintTop_toTopOf="@+id/dialog_capture"
+        app:layout_constraintBottom_toBottomOf="@+id/dialog_capture"
+        app:layout_constraintStart_toStartOf="@+id/dialog_capture"
+        android:visibility="invisible"
+        android:src="@drawable/user04_oni"/>
+
+    <ImageView
+        android:id="@+id/dialog_captured_normal"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintTop_toTopOf="@+id/dialog_capture"
+        app:layout_constraintBottom_toBottomOf="@+id/dialog_capture"
+        app:layout_constraintEnd_toEndOf="@+id/dialog_capture"
+        android:visibility="invisible"
+        android:src="@drawable/user01_caputure"/>
+
+    <ImageView
+        android:id="@+id/metal_rod"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        app:layout_constraintTop_toTopOf="@+id/dialog_captured_normal"
+        app:layout_constraintStart_toEndOf="@+id/dialog_captured_demon"
+        android:visibility="invisible"
+        android:src="@drawable/kanabou"/>
+
+    <ImageView
+        android:id="@+id/captured_close"
+        android:layout_width="160dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintStart_toStartOf="@+id/dialog_captured"
+        app:layout_constraintEnd_toEndOf="@id/dialog_captured"
+        app:layout_constraintBottom_toBottomOf="@+id/dialog_captured"
+        android:visibility="invisible"
+        android:src="@drawable/button_close"/>
+
+    <ImageView
+        android:id="@+id/text_oni_trap"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        app:layout_constraintTop_toBottomOf="@+id/user1_normal"
+        app:layout_constraintBottom_toTopOf="@+id/bt_capture_on"
+        app:layout_constraintStart_toEndOf="@+id/iv_oni_trap"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible"
+        android:src="@drawable/text_onistrap"/>
+
+    <ImageView
+        android:id="@+id/iv_oni_trap"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toBottomOf="@+id/text_oni_trap"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/text_oni_trap"
+        android:visibility="invisible"
+        android:src="@drawable/user04_oni"/>
+
+    <ImageView
+        android:id="@+id/iv_watching"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toTopOf="@+id/bt_capture_off"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible"
+        android:src="@drawable/text_watching"/>
+
+    <ImageView
+        android:id="@+id/bt_capture_on"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        app:srcCompat="@drawable/button_captured_on"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:contentDescription="@string/description_capture_button" />
+
+    <ImageView
+        android:id="@+id/bt_capture_off"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        app:srcCompat="@drawable/button_captured_off"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="invisible"
+        android:contentDescription="@string/description_capture_button" />
+
+    <ImageView
+        android:id="@+id/bt_skill_on"
+        android:layout_width="180dp"
+        android:layout_height="100dp"
+        app:srcCompat="@drawable/button_skill_on"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+        android:id="@+id/bt_skill_off"
+        android:layout_width="180dp"
+        android:layout_height="100dp"
+        app:srcCompat="@drawable/button_skill_off"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ProgressBar
+        android:id="@+id/progress_skill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_marginBottom="24dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/bt_skill_off"
+        app:layout_constraintStart_toStartOf="@+id/bt_skill_off"
+        app:layout_constraintEnd_toEndOf="@+id/bt_skill_off"
+        android:visibility="invisible"/>
+
+    <ImageView
+        android:id="@+id/user1_normal"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:src="@drawable/user01_runaway"
+        android:layout_marginTop="-10dp"
+        android:layout_marginStart="40dp"
+        app:layout_constraintTop_toBottomOf="@+id/iv_time"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <ImageView
+        android:id="@+id/user1_captured"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:src="@drawable/user01_caputure"
+        android:visibility="invisible"
+        android:layout_marginTop="-10dp"
+        android:layout_marginStart="40dp"
+        app:layout_constraintTop_toBottomOf="@+id/iv_time"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <ImageView
+        android:id="@+id/user2_normal"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:src="@drawable/user02_runaway"
+        app:layout_constraintTop_toTopOf="@+id/user1_normal"
+        app:layout_constraintStart_toEndOf="@+id/user1_normal"
+        app:layout_constraintEnd_toStartOf="@+id/user3_normal"/>
+
+    <ImageView
+        android:id="@+id/user3_normal"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:src="@drawable/user03_runaway"
+        app:layout_constraintTop_toTopOf="@+id/user1_normal"
+        app:layout_constraintEnd_toStartOf="@+id/user4_demon"
+        app:layout_constraintStart_toEndOf="@+id/user2_normal"/>
+
+    <ImageView
+        android:id="@+id/user4_demon"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:src="@drawable/user04_oni"
+        android:layout_marginEnd="40dp"
+        app:layout_constraintTop_toTopOf="@+id/user1_normal"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

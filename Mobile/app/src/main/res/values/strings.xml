@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">HideAndSeek</string>
+    <string name="description_time">時間が表示されています</string>
+    <string name="description_capture_button">鬼に捕まったときに押すボタン</string>
 </resources>
