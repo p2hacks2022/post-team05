@@ -168,10 +168,7 @@ class MainFragment: Fragment() {
 
                 // URLから画像を取得
                 coroutineScope.launch {
-                    val originalDeferred = coroutineScope.async(Dispatchers.IO) {
-                        getOriginalBitmap(url)
-                    }
-                    val originalBitmap = originalDeferred.await()
+                    val originalBitmap = viewModel.fetchMap(url)
                     viewModel.setMap(originalBitmap)
                 }
             }
@@ -337,9 +334,4 @@ class MainFragment: Fragment() {
 
         return root
     }
-
-    fun getOriginalBitmap(url: String): Bitmap =
-        URL(url).openStream().use {
-            BitmapFactory.decodeStream(it)
-        }
 }
