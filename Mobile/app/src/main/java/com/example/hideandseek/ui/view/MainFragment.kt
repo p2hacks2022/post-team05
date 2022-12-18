@@ -3,6 +3,7 @@ package com.example.hideandseek.ui.view
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.Image
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -78,23 +79,75 @@ class MainFragment: Fragment() {
         // 捕まったボタン
         val btCaptureOn:      ImageView = binding.btCaptureOn
         val btCaptureOff:     ImageView = binding.btCaptureOff
+
+        fun changeBtCaptureVisible(isOn: Boolean) {
+            if (isOn) {
+                btCaptureOn.visibility  = View.VISIBLE
+                btCaptureOff.visibility = View.INVISIBLE
+            } else {
+                btCaptureOn.visibility  = View.INVISIBLE
+                btCaptureOff.visibility = View.VISIBLE
+            }
+        }
+
         // スキルボタン
         val btSkillOn:        ImageView   = binding.btSkillOn
         val btSkillOff:       ImageView   = binding.btSkillOff
         val progressSkill:    ProgressBar = binding.progressSkill
+
+        fun changeBtSkillVisible(isOn: Boolean) {
+            if (isOn) {
+                btSkillOn.visibility     = View.VISIBLE
+                btSkillOff.visibility    = View.INVISIBLE
+                progressSkill.visibility = View.INVISIBLE
+            } else {
+                btSkillOn.visibility     = View.INVISIBLE
+                btSkillOff.visibility    = View.VISIBLE
+                progressSkill.visibility = View.VISIBLE
+
+                progressSkill.max = 60
+            }
+        }
+
         // 捕まったか確認するダイアログ
         val dialogCapture:    ImageView = binding.dialogCapture
         val ivDemonCapture:   ImageView = binding.dialogCaptureDemon
         val btCaptureYes:     ImageView = binding.btCaptureYes
         val btCaptureNo:      ImageView = binding.btCaptureNo
+
+        fun changeCaptureDialogVisible(visibility: Int) {
+            dialogCapture.visibility  = visibility
+            ivDemonCapture.visibility = visibility
+            btCaptureYes.visibility   = visibility
+            btCaptureNo.visibility    = visibility
+        }
+
         // 捕まった後のダイアログ
         val dialogCaptured:   ImageView = binding.dialogCaptured
         val ivDemonCaptured:  ImageView = binding.dialogCapturedDemon
         val ivNormalCaptured: ImageView = binding.dialogCapturedNormal
         val metalRod:         ImageView = binding.metalRod
         val btCapturedClose:  ImageView = binding.capturedClose
+
+        fun changeAfterCaptureDialogVisible(visibility: Int) {
+            dialogCaptured.visibility   = visibility
+            ivDemonCaptured.visibility  = visibility
+            ivNormalCaptured.visibility = visibility
+            metalRod.visibility         = visibility
+            btCapturedClose.visibility  = visibility
+        }
+
         // 観戦中
         val ivWatching:       ImageView = binding.ivWatching
+
+        // 捕まってステータスが捕まったになったら観戦モードになる
+        fun changeStatusCaptured() {
+            ivWatching.visibility   = View.VISIBLE
+            changeBtCaptureVisible(false)
+            btSkillOff.visibility   = View.VISIBLE
+            btSkillOn.visibility    = View.INVISIBLE
+        }
+
         // User normal
         val user1Normal:      ImageView = binding.user1Normal
         val user2Normal:      ImageView = binding.user2Normal
@@ -112,6 +165,13 @@ class MainFragment: Fragment() {
         val dialogClear:      ImageView = binding.dialogClear
         val dialogClearUser1: ImageView = binding.dialogClearUser1
         val btClearClose:     ImageView = binding.clearClose
+
+        fun changeClearDialogVisible(visibility: Int) {
+            dialogClear.visibility      = visibility
+            dialogClearUser1.visibility = visibility
+            btClearClose.visibility     = visibility
+        }
+
         // Result画面
         val resultBack:       ImageView = binding.resultBack
         val tvResult:         TextView  = binding.tvResult
@@ -122,6 +182,52 @@ class MainFragment: Fragment() {
         val loserUser3:       ImageView = binding.loserUser3
         val loserUser4:       ImageView = binding.loserUser4
         val btResultClose:    ImageView = binding.btResultClose
+
+        fun changeResultDialogVisible(visibility: Int) {
+            resultBack.visibility    = visibility
+            tvResult.visibility      = visibility
+            tvWinner.visibility      = visibility
+            tvLoser.visibility       = visibility
+            winnerUser1.visibility   = visibility
+            winnerUser2.visibility   = visibility
+            loserUser3.visibility    = visibility
+            loserUser4.visibility    = visibility
+            btResultClose.visibility = visibility
+        }
+
+        fun changeOtherResultDialog(visibility: Int) {
+            ivTime.visibility         = visibility
+            tvNow.visibility          = visibility
+            tvLimit.visibility        = visibility
+            tvRelativeTime.visibility = visibility
+            tvLimitTime.visibility    = visibility
+            user1Normal.visibility    = visibility
+            user2Normal.visibility    = visibility
+            user3Normal.visibility    = visibility
+            user4Demon.visibility     = visibility
+            user1Captured.visibility  = visibility
+            btSkillOn.visibility      = visibility
+            btSkillOff.visibility     = visibility
+            progressSkill.visibility  = visibility
+
+            dialogCapture.visibility  = visibility
+            ivDemonCapture.visibility = visibility
+            btCaptureYes.visibility   = visibility
+            btCaptureNo.visibility    = visibility
+
+            btCaptureOn.visibility      = visibility
+            btCaptureOff.visibility     = visibility
+
+            ivEye.visibility           = visibility
+            tvTrap.visibility          = visibility
+            trapDialogText.visibility  = visibility
+            trapDialogDemon.visibility = visibility
+
+            dialogClear.visibility      = visibility
+            dialogClearUser1.visibility = visibility
+            btClearClose.visibility     = visibility
+        }
+
 
         // データベースからデータを持ってくる
         context?.let { viewModel.setAllUsersLive(it) }
@@ -168,10 +274,7 @@ class MainFragment: Fragment() {
 
                 // URLから画像を取得
                 coroutineScope.launch {
-                    val originalDeferred = coroutineScope.async(Dispatchers.IO) {
-                        getOriginalBitmap(url)
-                    }
-                    val originalBitmap = originalDeferred.await()
+                    val originalBitmap = viewModel.fetchMap(url)
                     viewModel.setMap(originalBitmap)
                 }
             }
@@ -184,121 +287,61 @@ class MainFragment: Fragment() {
         viewModel.isOverLimitTime.observe(viewLifecycleOwner) {
             if (it) {
                 // クリアダイアログを表示
-                dialogClear.visibility      = View.VISIBLE
-                dialogClearUser1.visibility = View.VISIBLE
-                btClearClose.visibility     = View.VISIBLE
+                changeClearDialogVisible(View.VISIBLE)
             }
         }
 
         // クリアダイアログの閉じるを押した時
         btClearClose.setOnClickListener {
             // クリアダイアログを非表示
-            dialogClear.visibility      = View.INVISIBLE
-            dialogClearUser1.visibility = View.INVISIBLE
-            btClearClose.visibility     = View.INVISIBLE
+            changeClearDialogVisible(View.INVISIBLE)
 
-            // Result画面の表示
-            resultBack.visibility    = View.VISIBLE
-            tvResult.visibility      = View.VISIBLE
-            tvWinner.visibility      = View.VISIBLE
-            tvLoser.visibility       = View.VISIBLE
-            winnerUser1.visibility   = View.VISIBLE
-            winnerUser2.visibility   = View.VISIBLE
-            loserUser3.visibility    = View.VISIBLE
-            loserUser4.visibility    = View.VISIBLE
-            btResultClose.visibility = View.VISIBLE
+            // Resultダイアログの表示
+            changeResultDialogVisible(View.VISIBLE)
+
             // Result以外のものを非表示
-            ivTime.visibility         = View.INVISIBLE
-            tvNow.visibility          = View.INVISIBLE
-            tvLimit.visibility        = View.INVISIBLE
-            tvRelativeTime.visibility = View.INVISIBLE
-            tvLimitTime.visibility    = View.INVISIBLE
-            user1Normal.visibility    = View.INVISIBLE
-            user2Normal.visibility    = View.INVISIBLE
-            user3Normal.visibility    = View.INVISIBLE
-            user4Demon.visibility     = View.INVISIBLE
-            btCaptureOn.visibility    = View.INVISIBLE
-            btSkillOn.visibility      = View.INVISIBLE
+            changeOtherResultDialog(View.INVISIBLE)
         }
 
-        // Result画面の閉じるを押した時の処理
+        // Resultダイアログの閉じるを押した時の処理
         btResultClose.setOnClickListener {
-            // Result画面の非表示
-            resultBack.visibility    = View.INVISIBLE
-            tvResult.visibility      = View.INVISIBLE
-            tvWinner.visibility      = View.INVISIBLE
-            tvLoser.visibility       = View.INVISIBLE
-            winnerUser1.visibility   = View.INVISIBLE
-            winnerUser2.visibility   = View.INVISIBLE
-            loserUser3.visibility    = View.INVISIBLE
-            loserUser4.visibility    = View.INVISIBLE
-            btResultClose.visibility = View.INVISIBLE
+            // Resultダイアログの非表示
+            changeResultDialogVisible(View.INVISIBLE)
 
             // Result以外のものを表示
-            ivTime.visibility         = View.VISIBLE
-            tvNow.visibility          = View.VISIBLE
-            tvLimit.visibility        = View.VISIBLE
-            tvRelativeTime.visibility = View.VISIBLE
-            tvLimitTime.visibility    = View.VISIBLE
-            user1Normal.visibility    = View.VISIBLE
-            user2Normal.visibility    = View.VISIBLE
-            user3Normal.visibility    = View.VISIBLE
-            user4Demon.visibility     = View.VISIBLE
-            btCaptureOn.visibility    = View.VISIBLE
-            btSkillOn.visibility      = View.VISIBLE
+            changeOtherResultDialog(View.VISIBLE)
         }
 
         // 捕まったボタンが押された時の処理
         btCaptureOn.setOnClickListener {
             // ボタンを押された状態にする
-            btCaptureOff.visibility   = View.VISIBLE
-            // ダイアログが出現
-            dialogCapture.visibility  = View.VISIBLE
-            ivDemonCapture.visibility = View.VISIBLE
-            btCaptureYes.visibility   = View.VISIBLE
-            btCaptureNo.visibility    = View.VISIBLE
+            changeBtCaptureVisible(false)
+            // 捕まったか確認するダイアログが出現
+            changeCaptureDialogVisible(View.VISIBLE)
 
         }
 
         btCaptureNo.setOnClickListener {
             // ボタンを押されていない状態にする
-            btCaptureOff.visibility   = View.INVISIBLE
-            // ダイアログが消える
-            dialogCapture.visibility  = View.INVISIBLE
-            ivDemonCapture.visibility = View.INVISIBLE
-            btCaptureYes.visibility   = View.INVISIBLE
-            btCaptureNo.visibility    = View.INVISIBLE
+            changeBtCaptureVisible(true)
+            // 捕まったか確認するダイアログが消える
+            changeCaptureDialogVisible(View.INVISIBLE)
         }
 
         btCaptureYes.setOnClickListener {
-            // ダイアログが消える
-            dialogCapture.visibility  = View.INVISIBLE
-            ivDemonCapture.visibility = View.INVISIBLE
-            btCaptureYes.visibility   = View.INVISIBLE
-            btCaptureNo.visibility    = View.INVISIBLE
+            // 捕まったか確認するダイアログが消える
+            changeCaptureDialogVisible(View.INVISIBLE)
 
             // 捕まったダイアログが出る
-            dialogCaptured.visibility   = View.VISIBLE
-            ivDemonCaptured.visibility  = View.VISIBLE
-            ivNormalCaptured.visibility = View.VISIBLE
-            metalRod.visibility         = View.VISIBLE
-            btCapturedClose.visibility  = View.VISIBLE
+            changeAfterCaptureDialogVisible(View.VISIBLE)
         }
 
         btCapturedClose.setOnClickListener {
             // 捕まったダイアログが消える
-            dialogCaptured.visibility   = View.INVISIBLE
-            ivDemonCaptured.visibility  = View.INVISIBLE
-            ivNormalCaptured.visibility = View.INVISIBLE
-            metalRod.visibility         = View.INVISIBLE
-            btCapturedClose.visibility  = View.INVISIBLE
+            changeAfterCaptureDialogVisible(View.INVISIBLE)
 
             // 観戦モードになる
-            ivWatching.visibility   = View.VISIBLE
-            btCaptureOff.visibility = View.VISIBLE
-            btCaptureOn.visibility  = View.INVISIBLE
-            btSkillOff.visibility   = View.VISIBLE
-            btSkillOn.visibility    = View.INVISIBLE
+            changeStatusCaptured()
 
             // ステータスが変わる
             user1Normal.visibility   = View.INVISIBLE
@@ -317,29 +360,18 @@ class MainFragment: Fragment() {
         }
 
         viewModel.isOverSkillTime.observe(viewLifecycleOwner) {
-            if (it) {
-                btSkillOn.visibility     = View.VISIBLE
-                btSkillOff.visibility    = View.INVISIBLE
-                progressSkill.visibility = View.INVISIBLE
-            } else {
-                btSkillOn.visibility     = View.INVISIBLE
-                btSkillOff.visibility    = View.VISIBLE
-                progressSkill.visibility = View.VISIBLE
-
-                progressSkill.max = 60
-            }
+            changeBtSkillVisible(it)
         }
+
+
 
         // Mapに画像をセット
         viewModel.map.observe(viewLifecycleOwner) {
             ivMap.setImageBitmap(it)
         }
 
+
+
         return root
     }
-
-    fun getOriginalBitmap(url: String): Bitmap =
-        URL(url).openStream().use {
-            BitmapFactory.decodeStream(it)
-        }
 }
