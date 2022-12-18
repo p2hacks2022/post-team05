@@ -76,6 +76,9 @@ Web：前田、野村
     - [https://gist.github.com/Enchan1207/0ea2c7a7d6a3c16aea5683435d1972f8](https://gist.github.com/Enchan1207/0ea2c7a7d6a3c16aea5683435d1972f8)
 - 以上に加え、積極的にメンバーの進捗をヒアリングしたり、自分から発信するようにした。
 - 積極的に会話のメモを残すように徹底し、認識の齟齬がなくなるように努めた。
+- Notionで期日やドキュメントなどをまとめ管理した。
+![Untitled (5)](https://user-images.githubusercontent.com/64563041/208280460-617568fd-6f3a-4015-b944-4ad4c3221822.png)
+![Untitled (6)](https://user-images.githubusercontent.com/64563041/208280462-4a07ee47-5d37-45ca-8e39-d6dc4971ccdd.png)
 
 
 ## 開発技術
