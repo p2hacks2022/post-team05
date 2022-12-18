@@ -22,18 +22,30 @@ import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
-class MainActivityViewModel: ViewModel() {
+data class MainActivityUiState(
+    val relativeTime: LocalTime = LocalTime.MAX
+)
 
-    private lateinit var relativeTime: LocalTime
+class MainActivityViewModel: ViewModel() {
+    private val _uiState = MutableStateFlow(MainActivityUiState())
+    val uiState: StateFlow<MainActivityUiState> = _uiState.asStateFlow()
 
     // relativeTimeの初期値（アプリを起動したときのLocalTime）をセットする
     fun setUpRelativeTime(nowTime: LocalTime) {
-        relativeTime = nowTime
+        _uiState.update { currentState ->
+            currentState.copy(
+                relativeTime = nowTime
+            )
+        }
     }
 
     fun calculateRelativeTime(gap: Long) {
-        Log.d("relativeTime", relativeTime.toString())
-        relativeTime = relativeTime.minusNanos(gap).plusSeconds(1)
+        _uiState.update { currentState ->
+            Log.d("relativeTime", currentState.relativeTime.toString())
+            currentState.copy(
+                relativeTime = currentState.relativeTime.minusNanos(gap).plusSeconds(1)
+            )
+        }
     }
 
     // 特殊相対性理論によりずれを計算する
@@ -43,7 +55,7 @@ class MainActivityViewModel: ViewModel() {
     }
 
     // ActivityからrelativeTimeとlocationを受け取り、Roomデータベースにuserデータとして送信
-    fun insert(location: Location, context: Context) = viewModelScope.launch {
+    fun insert(relativeTime: LocalTime, location: Location, context: Context) = viewModelScope.launch {
         val user = User(0, relativeTime.toString().substring(0, 8), location.longitude, location.latitude)
         withContext(Dispatchers.IO) {
             UserRepository(context).insert(user)

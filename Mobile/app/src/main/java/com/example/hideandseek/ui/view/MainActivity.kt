@@ -158,7 +158,14 @@ class MainActivity : AppCompatActivity() {
         // 相対時間を計算
         viewModel.calculateRelativeTime(gap)
         // Roomに相対時間と座標を送る
-        viewModel.insert(location, applicationContext)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect {
+                    // Update UI elements
+                    viewModel.insert(it.relativeTime, location, applicationContext)
+                }
+            }
+        }
     }
 
     // 位置情報の権限があるかどうかを確認する関数
