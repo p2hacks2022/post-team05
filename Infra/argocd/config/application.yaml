@@ -15,7 +15,7 @@ spec:
   project: default
   source:
     repoURL: 'ssh://git@github.com/p2hacks2022/post-team05.git'
-    path: Backend/helm
+    path: Backend/app
     targetRevision: release
     helm:
       fileParameters:

@@ -16,5 +16,6 @@ spec:
   selector:
     io.kompose.service: hikky-api
   type: NodePort
+  targetPort: 32581
 status:
   loadBalancer: {}
