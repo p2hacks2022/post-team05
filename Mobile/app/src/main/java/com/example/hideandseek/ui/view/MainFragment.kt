@@ -63,35 +63,8 @@ class MainFragment: Fragment() {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        // デモ用のリスト作成
-        for (i in 0..239) {
-            locationArray[i][0][0] = 41.84202707025747 + i*0.00001
-            locationArray[i][0][1] = 140.7673718711624 + i*0.00001
-            statusArray[i][0][0] = 0
-            statusArray[i][0][1] = 0
-            locationArray[i][1][0] = 41.84222707025747 + i*0.00001
-            locationArray[i][1][1] = 140.7673718711624 + i*0.00001
-            statusArray[i][1][0] = 0
-            statusArray[i][1][1] = 0
-            locationArray[i][2][0] = 41.84192707025747 + i*0.00001
-            locationArray[i][2][1] = 140.7674718711624 + i*0.00001
-            statusArray[i][2][0] = 1
-            statusArray[i][2][1] = 0
-            if (i > 60) {
-                locationArray[i][0][0] = 41.84202707025747 - i*0.000001
-                locationArray[i][0][1] = 140.7673718711624 - i*0.00001
-                statusArray[i][0][0] = 0
-                statusArray[i][0][1] = 0
-                locationArray[i][1][0] = 41.84222707025747 - i*0.000001
-                locationArray[i][1][1] = 140.7673718711624 - i*0.000015
-                statusArray[i][1][0] = 0
-                statusArray[i][1][1] = 1
-                locationArray[i][2][0] = 41.84192707025747 - i*0.000001
-                locationArray[i][2][1] = 140.7674718711624 - i*0.000015
-                statusArray[i][2][0] = 1
-                statusArray[i][2][1] = 0
-            }
-        }
+        // デモ用のデータのセットアップ
+        viewModel.setUpDemoList(locationArray, statusArray)
         
         // Viewの取得
         // 時間表示の場所
