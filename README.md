@@ -49,8 +49,6 @@ EinStealth. (EinsteinとStealthから)
 
 **役割分担**
 
----
-
 モバイル：出口、野村
 
 Web：前田、野村
@@ -61,12 +59,12 @@ Web：前田、野村
 
 **開発における工夫した点**
 
-- 継続的デリバリの導入によって、デプロイ関連の負荷を軽減した
-- multi-staged buildを行いDocker Imageを軽量化することで、ビルド時間の軽減、レジストリへのpush/pull時間の削減、セキュリティの向上につながった
+- 継続的デリバリの導入によって、デプロイ関連の負荷を軽減した。
+- multi-staged buildを行いDocker Imageを軽量化することで、ビルド時間の軽減、レジストリへのpush/pull時間の削減、セキュリティの向上につながった。
     
     [10 Docker Security Best Practices | Docker Best Practices](https://snyk.io/blog/10-docker-image-security-best-practices/)
     
-- Issueドリブン開発を行ったことで、メンバー間での進捗の共有が容易になり快適に開発を行うことができた
+- Issueドリブン開発を行ったことで、メンバー間での進捗の共有が容易になり快適に開発を行うことができた。
     - [https://gist.github.com/Enchan1207/0ea2c7a7d6a3c16aea5683435d1972f8](https://gist.github.com/Enchan1207/0ea2c7a7d6a3c16aea5683435d1972f8)
 - 以上に加え、積極的にメンバーの進捗をヒアリングしたり、自分から発信するようにした。
 - 積極的に会話のメモを残すように徹底し、認識の齟齬がなくなるように努めた。
