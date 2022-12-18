@@ -107,14 +107,11 @@ class MainActivity : AppCompatActivity() {
             .addOnSuccessListener { location : Location? ->
                 // Got last known location. In some rare situations this can be null
                 if (location != null) {
+                    // 相対時間の初期化
                     relativeTime = LocalTime.now()
+                    // Roomデータベースの初期化
                     viewModel.deleteAll(applicationContext)
-                    //ずれと相対時間を計算
-                    val gap = viewModel.calculateGap(location)
-                    relativeTime = relativeTime.minusNanos(gap)
-                    val user = User(0, relativeTime.toString().substring(0, 8), location.longitude, location.latitude)
-                    viewModel.insert(user, applicationContext)
-                    Log.d("LocationTest", location.speed.toString())
+                    postCalculatedRelativeTime(location)
                 }
             }
 
@@ -135,12 +132,7 @@ class MainActivity : AppCompatActivity() {
             override fun onLocationResult(locationResult: LocationResult) {
                 super.onLocationResult(locationResult)
                 for (location in locationResult.locations) {
-                    // ずれと相対時間を計算
-                    val gap = viewModel.calculateGap(location)
-                    relativeTime = relativeTime.minusNanos(gap).plusSeconds(1)
-                    val user = User(0, relativeTime.toString().substring(0, 8), location.longitude, location.latitude)
-                    viewModel.insert(user, applicationContext)
-                    Log.d("LocationCallback", "rel: $relativeTime, loc${LocalTime.now()}")
+                    postCalculatedRelativeTime(location)
                 }
             }
         }
@@ -157,7 +149,18 @@ class MainActivity : AppCompatActivity() {
         startLocationUpdates()
     }
 
-    // 位置情報の権限があるかどうかを確認する関
+    // 相対時間を計算し、Roomにinsertする関数
+    private fun postCalculatedRelativeTime(location: Location) {
+        // ずれとを計算
+        val gap = viewModel.calculateGap(location)
+        // 相対時間を計算
+        relativeTime = relativeTime.minusNanos(gap).plusSeconds(1)
+        // Roomに相対時間と座標を送る
+        val user = User(0, relativeTime.toString().substring(0, 8), location.longitude, location.latitude)
+        viewModel.insert(user, applicationContext)
+    }
+
+    // 位置情報の権限があるかどうかを確認する関数
     private fun checkLocationPermission() {
         if (ActivityCompat.checkSelfPermission(
                 this,
