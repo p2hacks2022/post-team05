@@ -22,6 +22,7 @@ EinStealth. (EinsteinとStealthから)
 2.かくれんぼ開始
 
 3.鬼サイド→勝利条件：制限時間内に全員を確保、敗北条件：制限時間内に一人でも捕まえてない人がいれば負け
+
   隠れる人間サイド→勝利条件：制限時間内に一度も鬼に発見されない。敗北条件：制限時間内に鬼に発見されてしまう。
 
 4.鬼が全員捕まえた or 隠れる側の人間が一人でも勝ち抜けた時ゲーム終了
@@ -44,7 +45,7 @@ EinStealth. (EinsteinとStealthから)
 
 **EinStealth紹介用webサイト**
 
-リンク貼ってください
+
 ![Untitled](https://user-images.githubusercontent.com/64563041/208280429-19a77467-f067-44f8-b134-aa3ccc6556c4.png)
 ![Untitled (1)](https://user-images.githubusercontent.com/64563041/208280433-d759a7e3-cc8e-4a4b-a153-1e077862a74a.png)
 ![Untitled (2)](https://user-images.githubusercontent.com/64563041/208280434-276d7900-6fa5-4ddb-9adc-79f241091ca4.png)
