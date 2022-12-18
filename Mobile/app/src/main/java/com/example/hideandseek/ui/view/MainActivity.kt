@@ -14,6 +14,9 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -29,6 +32,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.net.URL
 import java.time.LocalTime
@@ -44,8 +48,6 @@ class MainActivity : AppCompatActivity() {
 
     // 現在地を更新するためのコールバック
     private lateinit var locationCallback: LocationCallback
-
-    private lateinit var relativeTime: LocalTime
 
     private val viewModel: MainActivityViewModel by viewModels()
 
@@ -108,7 +110,7 @@ class MainActivity : AppCompatActivity() {
                 // Got last known location. In some rare situations this can be null
                 if (location != null) {
                     // 相対時間の初期化
-                    relativeTime = LocalTime.now()
+                    viewModel.setUpRelativeTime(LocalTime.now())
                     // Roomデータベースの初期化
                     viewModel.deleteAll(applicationContext)
                     postCalculatedRelativeTime(location)
@@ -154,10 +156,16 @@ class MainActivity : AppCompatActivity() {
         // ずれとを計算
         val gap = viewModel.calculateGap(location)
         // 相対時間を計算
-        relativeTime = relativeTime.minusNanos(gap).plusSeconds(1)
+        viewModel.calculateRelativeTime(gap)
         // Roomに相対時間と座標を送る
-        val user = User(0, relativeTime.toString().substring(0, 8), location.longitude, location.latitude)
-        viewModel.insert(user, applicationContext)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect {
+                    // Update UI elements
+                    viewModel.insert(it.relativeTime, location, applicationContext)
+                }
+            }
+        }
     }
 
     // 位置情報の権限があるかどうかを確認する関数

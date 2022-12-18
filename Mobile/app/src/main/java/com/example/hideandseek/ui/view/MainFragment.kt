@@ -53,9 +53,6 @@ class MainFragment: Fragment() {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
-    private var width : Int = 0
-    private var height: Int = 0
-
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -66,35 +63,8 @@ class MainFragment: Fragment() {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        // デモ用のリスト作成
-        for (i in 0..239) {
-            locationArray[i][0][0] = 41.84202707025747 + i*0.00001
-            locationArray[i][0][1] = 140.7673718711624 + i*0.00001
-            statusArray[i][0][0] = 0
-            statusArray[i][0][1] = 0
-            locationArray[i][1][0] = 41.84222707025747 + i*0.00001
-            locationArray[i][1][1] = 140.7673718711624 + i*0.00001
-            statusArray[i][1][0] = 0
-            statusArray[i][1][1] = 0
-            locationArray[i][2][0] = 41.84192707025747 + i*0.00001
-            locationArray[i][2][1] = 140.7674718711624 + i*0.00001
-            statusArray[i][2][0] = 1
-            statusArray[i][2][1] = 0
-            if (i > 60) {
-                locationArray[i][0][0] = 41.84202707025747 - i*0.000001
-                locationArray[i][0][1] = 140.7673718711624 - i*0.00001
-                statusArray[i][0][0] = 0
-                statusArray[i][0][1] = 0
-                locationArray[i][1][0] = 41.84222707025747 - i*0.000001
-                locationArray[i][1][1] = 140.7673718711624 - i*0.000015
-                statusArray[i][1][0] = 0
-                statusArray[i][1][1] = 1
-                locationArray[i][2][0] = 41.84192707025747 - i*0.000001
-                locationArray[i][2][1] = 140.7674718711624 - i*0.000015
-                statusArray[i][2][0] = 1
-                statusArray[i][2][1] = 0
-            }
-        }
+        // デモ用のデータのセットアップ
+        viewModel.setUpDemoList(locationArray, statusArray)
         
         // Viewの取得
         // 時間表示の場所
@@ -195,13 +165,6 @@ class MainFragment: Fragment() {
                         )
                     }
                 }
-
-                // statusの変更
-//                for (i in 0..2) {
-//                    if (statusArray[it[it.size-1].relativeTime.substring(6).toInt()*2][i][0] == 1) {
-//
-//                    }
-//                }
 
                 // URLから画像を取得
                 coroutineScope.launch {
@@ -367,35 +330,10 @@ class MainFragment: Fragment() {
             }
         }
 
-        // 特定の時刻の位置情報を表示
-//        viewModel.location.observe(viewLifecycleOwner) {
-//            Log.d("TEST", it.toString())
-//            if (it.isNotEmpty()) {
-//                var url = "https://maps.googleapis.com/maps/api/staticmap?center=${it[0].latitude},${it[0].longitude}&size=350x640&scale=1&zoom=18&key=AIzaSyA-cfLegBoleKaT2TbU5R4K1uRkzBR6vUQ&markers=color:red|${it[0].latitude},${it[0].longitude}"
-//
-//                if (it.size > 1) {
-//                    for (i in 1 until it.size) {
-//                        url += "&markers=color:red|${it[i].latitude},${it[i].longitude}"
-//                    }
-//                }
-//
-//                // URLから画像を取得
-//                coroutineScope.launch {
-//                    val originalDeferred = coroutineScope.async(Dispatchers.IO) {
-//                        getOriginalBitmap(url)
-//                    }
-//                    val originalBitmap = originalDeferred.await()
-//                    viewModel.setMap(originalBitmap)
-//                }
-//            }
-//        }
-
         // Mapに画像をセット
         viewModel.map.observe(viewLifecycleOwner) {
             ivMap.setImageBitmap(it)
         }
-
-
 
         return root
     }
