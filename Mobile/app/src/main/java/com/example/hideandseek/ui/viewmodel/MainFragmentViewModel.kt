@@ -82,20 +82,12 @@ class MainFragmentViewModel: ViewModel() {
         _isOverSkillTime.value = p0
     }
 
-    lateinit var location: LiveData<List<User>>
-
-    fun getLocation(relativeTime: String, context: Context) {
-        location = UserRepository(context).getLocation(relativeTime).asLiveData()
-    }
-
     private val _map = MutableLiveData<Bitmap>()
     val map: LiveData<Bitmap> = _map
 
     fun setMap(p0: Bitmap) {
         _map.value = p0
     }
-
-
 
     suspend fun fetchMap(url: String): Bitmap {
         return MapRepository().fetchMap(url)

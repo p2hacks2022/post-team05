@@ -53,9 +53,6 @@ class MainFragment: Fragment() {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
-    private var width : Int = 0
-    private var height: Int = 0
-
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -367,35 +364,10 @@ class MainFragment: Fragment() {
             }
         }
 
-        // 特定の時刻の位置情報を表示
-//        viewModel.location.observe(viewLifecycleOwner) {
-//            Log.d("TEST", it.toString())
-//            if (it.isNotEmpty()) {
-//                var url = "https://maps.googleapis.com/maps/api/staticmap?center=${it[0].latitude},${it[0].longitude}&size=350x640&scale=1&zoom=18&key=AIzaSyA-cfLegBoleKaT2TbU5R4K1uRkzBR6vUQ&markers=color:red|${it[0].latitude},${it[0].longitude}"
-//
-//                if (it.size > 1) {
-//                    for (i in 1 until it.size) {
-//                        url += "&markers=color:red|${it[i].latitude},${it[i].longitude}"
-//                    }
-//                }
-//
-//                // URLから画像を取得
-//                coroutineScope.launch {
-//                    val originalDeferred = coroutineScope.async(Dispatchers.IO) {
-//                        getOriginalBitmap(url)
-//                    }
-//                    val originalBitmap = originalDeferred.await()
-//                    viewModel.setMap(originalBitmap)
-//                }
-//            }
-//        }
-
         // Mapに画像をセット
         viewModel.map.observe(viewLifecycleOwner) {
             ivMap.setImageBitmap(it)
         }
-
-
 
         return root
     }
