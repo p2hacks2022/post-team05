@@ -23,10 +23,7 @@
         </div>
         <div class="PV">
             <p>PV</p>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/wJXg47XilEU"
-                title="YouTube video player" frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen></iframe>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/Y4kvGNOtfuo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
         <router-link to="/HowToPlay">
             <div class="intrDiffpage">
