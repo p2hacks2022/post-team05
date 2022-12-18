@@ -99,17 +99,8 @@ class MainActivity : AppCompatActivity() {
         // 位置情報を取得する
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        // permission check
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
+        // 位置情報の権限があるか確認する
+        checkLocationPermission()
 
         // 直近の位置情報を取得
         fusedLocationClient.lastLocation
@@ -166,9 +157,8 @@ class MainActivity : AppCompatActivity() {
         startLocationUpdates()
     }
 
-    // 位置情報の更新をする関数
-    private fun startLocationUpdates() {
-        // permission check
+    // 位置情報の権限があるかどうかを確認する関
+    private fun checkLocationPermission() {
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -179,6 +169,13 @@ class MainActivity : AppCompatActivity() {
         ) {
             return
         }
+    }
+
+    // 位置情報の更新をする関数
+    private fun startLocationUpdates() {
+        // 位置情報の権限があるか確認する
+        checkLocationPermission()
+        // 位置情報の更新
         fusedLocationClient.requestLocationUpdates(locationRequest,
         locationCallback,
             Looper.getMainLooper()
