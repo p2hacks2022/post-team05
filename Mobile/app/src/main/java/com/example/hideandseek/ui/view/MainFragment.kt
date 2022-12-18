@@ -166,13 +166,6 @@ class MainFragment: Fragment() {
                     }
                 }
 
-                // statusの変更
-//                for (i in 0..2) {
-//                    if (statusArray[it[it.size-1].relativeTime.substring(6).toInt()*2][i][0] == 1) {
-//
-//                    }
-//                }
-
                 // URLから画像を取得
                 coroutineScope.launch {
                     val originalDeferred = coroutineScope.async(Dispatchers.IO) {
