@@ -23,5 +23,8 @@ interface UserDao {
     fun getAll(): Flow<List<User>>
 
     @Query("DELETE FROM user_table")
-    fun deleteAll()
+    suspend fun deleteAll()
+
+    @Query("SELECT * FROM user_table WHERE relative_time = :relativeTime")
+    fun getLocation(relativeTime: String): Flow<List<User>>
 }

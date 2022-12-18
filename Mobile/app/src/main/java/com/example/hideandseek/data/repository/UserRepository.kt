@@ -1,8 +1,6 @@
 package com.example.hideandseek.data.repository
 
 import android.content.Context
-import android.location.Location
-import androidx.annotation.WorkerThread
 import com.example.hideandseek.data.datasource.local.User
 import com.example.hideandseek.data.datasource.local.UserDao
 import com.example.hideandseek.data.datasource.local.UserRoomDatabase
@@ -16,5 +14,13 @@ class UserRepository (private val context: Context) {
 
     suspend fun insert(user: User) {
         userDao.insert(user)
+    }
+
+    suspend fun deleteAll() {
+        userDao.deleteAll()
+    }
+
+    fun getLocation(relativeTime: String): Flow<List<User>> {
+        return userDao.getLocation(relativeTime)
     }
 }

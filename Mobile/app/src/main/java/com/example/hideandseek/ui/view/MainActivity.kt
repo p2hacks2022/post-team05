@@ -45,6 +45,8 @@ class MainActivity : AppCompatActivity() {
     // 現在地を更新するためのコールバック
     private lateinit var locationCallback: LocationCallback
 
+    private lateinit var relativeTime: LocalTime
+
     private val viewModel: MainActivityViewModel by viewModels()
 
     private lateinit var binding: ActivityMainBinding
@@ -63,6 +65,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_main
             )
         )
+
+        supportActionBar?.hide()
 
         // BottomNavigationのセットアップ
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -112,13 +116,13 @@ class MainActivity : AppCompatActivity() {
             .addOnSuccessListener { location : Location? ->
                 // Got last known location. In some rare situations this can be null
                 if (location != null) {
+                    relativeTime = LocalTime.now()
+                    viewModel.deleteAll(applicationContext)
                     //ずれと相対時間を計算
                     val gap = viewModel.calculateGap(location)
-                    val relativeTime = LocalTime.now().minusNanos(gap)
+                    relativeTime = relativeTime.minusNanos(gap)
                     val user = User(0, relativeTime.toString().substring(0, 8), location.longitude, location.latitude)
-                    if (relativeTime.second%10 == 0) {
-                        viewModel.insert(user, applicationContext)
-                    }
+                    viewModel.insert(user, applicationContext)
                     Log.d("LocationTest", location.speed.toString())
                 }
             }
@@ -142,10 +146,10 @@ class MainActivity : AppCompatActivity() {
                 for (location in locationResult.locations) {
                     // ずれと相対時間を計算
                     val gap = viewModel.calculateGap(location)
-                    val relativeTime = LocalTime.now().minusNanos(gap)
+                    relativeTime = relativeTime.minusNanos(gap).plusSeconds(1)
                     val user = User(0, relativeTime.toString().substring(0, 8), location.longitude, location.latitude)
                     viewModel.insert(user, applicationContext)
-                    Log.d("LocationCallback", location.speed.toString())
+                    Log.d("LocationCallback", "rel: $relativeTime, loc${LocalTime.now()}")
                 }
             }
         }
