@@ -4,8 +4,8 @@ on:
     types:
       - closed
     paths:
-      - 'Backend/api'
-      - 'Backend/db'
+      - 'Backend/src'
+      - 'Backend/src'
     branches:
       - 'release'
 
